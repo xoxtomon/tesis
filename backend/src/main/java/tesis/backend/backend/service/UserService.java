@@ -53,12 +53,13 @@ public class UserService {
     public Boolean provisionalLogin(String username, String password) {
         //Validate if the user exists by username
         if(!isUsernameAvailable(username)) {
-            // Get username on success
+            //Get user on success
             Optional<User> optionalUser = userRepository.findByUsername(username);
 
             if(optionalUser.isPresent()) {
+                //Access user's properties
                 User existingUser = optionalUser.get();
-                // Match the given password with the encrypted one
+                // Match the given password with the User's encrypted one
                 BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
                 if(bcrypt.matches(password, existingUser.getPasswordHash())){
                     return true;

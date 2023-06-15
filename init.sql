@@ -38,14 +38,20 @@ CREATE TABLE IF NOT EXISTS "role" (
     descripcion VARCHAR(50) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS userroles (
+    userRoleId INTEGER PRIMARY KEY NOT NULL,
+    userId UUID NOT NULL,
+    roleId INTEGER NOT NULL,
+    FOREIGN KEY (userId) REFERENCES "user"(userId),
+    FOREIGN KEY (roleId) REFERENCES "role"(roleId)
+);
+
 CREATE TABLE IF NOT EXISTS evaluadores (
     evaluadoresId UUID PRIMARY KEY NOT NULL,
     anteproyectoId UUID NOT NULL,
     userId UUID NOT NULL,
-    roleId INTEGER NOT NULL,
     FOREIGN KEY (anteproyectoId) REFERENCES anteproyecto(anteproyectoId),
-    FOREIGN KEY (userId) REFERENCES "user"(userId),
-    FOREIGN KEY (roleId) REFERENCES "role"(roleId)
+    FOREIGN KEY (userId) REFERENCES "user"(userId)
 );
 
 CREATE TABLE IF NOT EXISTS proyectogrado (
