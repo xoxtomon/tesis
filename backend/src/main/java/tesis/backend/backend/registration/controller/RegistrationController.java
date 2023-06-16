@@ -13,15 +13,11 @@ import tesis.backend.backend.user.service.UserService;
 @RestController
 @RequestMapping("/api/v1/registration")
 public class RegistrationController {
-
-    @Autowired
-    UserService userService;
     @Autowired
     RegistrationService registrationService;
 
     @PostMapping()
     public ResponseEntity<?> registerUser(@RequestBody User user) {
-        //return userService.addUser(user);
         return registrationService.addUser(user);
     }
 }

@@ -16,11 +16,11 @@ public class RegistrationService {
     private UserRepository userRepository;
 
     public ResponseEntity<?> addUser(User user) {
-        if(isAlreadyRegistered(user.getPersonalId()) == false) {
+        if(!isAlreadyRegistered(user.getPersonalId())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El documento de identidad ya está asociado a un usuario.");
         }
 
-        if(isUsernameAvailable(user.getUsername()) == false) {
+        if(!isUsernameAvailable(user.getUsername())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El nombre de usuario no está disponible.");
         }
 
@@ -28,7 +28,7 @@ public class RegistrationService {
         String hashedPassword = bcrypt.encode(user.getPasswordHash());
         user.setPasswordHash(hashedPassword);
 
-        User savedUser = userRepository.save(user);;
+        User savedUser = userRepository.save(user);
 
         return ResponseEntity.ok(savedUser);
     }

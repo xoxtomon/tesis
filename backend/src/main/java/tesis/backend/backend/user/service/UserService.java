@@ -24,32 +24,19 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    /*public void addRole(Integer id, Integer role) {
-        Optional<User> optionalUser = userRepository.findByPersonalId(id);
-        if(optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            Set<Role> userRoles = user.getRoles();
-
-            Optional<Role> optionalRole = roleRepository.findById(role);
-            if(optionalRole.isPresent()){
-                Role existingRole = optionalRole.get();
-                userRoles.add(existingRole);
-
-                userRepository.save(user);
-            }
-        }
-    }*/
     public void addRole(UUID id, Integer roleId) {
+        // Get the user by uuid
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
+            // Get the user's roles
             Set<Role> roles = user.getRoles();
             Optional<Role> optionalRole = roleRepository.findById(roleId);
             if(optionalRole.isPresent()){
                 Role newrole = optionalRole.get();
+                // Add the new role and save it to the repo
                 roles.add(newrole);
-                System.out.println(user);
                 userRepository.save(user);
             }
         }
