@@ -5,14 +5,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import tesis.backend.backend.role.entity.Role;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "user", schema = "public")
 @Data
 @NoArgsConstructor
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -53,5 +59,38 @@ public class User {
         this.lastname = lastname;
         this.estudiante = estudiante;
         this.roles = roles;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // GET the roles
+        Set<Role> roles = getRoles();
+        // Create a new collection to hold the GrantedAuthority objects
+        Set<GrantedAuthority> authorities = new HashSet<>();
+
+        for(Role role: roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getDescripcion()));
+        }
+        return authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
