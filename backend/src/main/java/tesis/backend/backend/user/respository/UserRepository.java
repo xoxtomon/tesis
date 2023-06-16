@@ -1,9 +1,9 @@
-package tesis.backend.backend.respository;
+package tesis.backend.backend.user.respository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import tesis.backend.backend.entity.User;
+import tesis.backend.backend.user.entity.User;
 
 import java.util.Optional;
 import java.util.UUID;

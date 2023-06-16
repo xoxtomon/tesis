@@ -1,4 +1,4 @@
-package tesis.backend.backend.entity;
+package tesis.backend.backend.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

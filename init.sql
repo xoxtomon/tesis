@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS "role" (
 );
 
 CREATE TABLE IF NOT EXISTS userroles (
-    userRoleId INTEGER PRIMARY KEY NOT NULL,
+    userRoleId UUID PRIMARY KEY NOT NULL,
     userId UUID NOT NULL,
     roleId INTEGER NOT NULL,
     FOREIGN KEY (userId) REFERENCES "user"(userId),
@@ -64,3 +64,14 @@ CREATE TABLE IF NOT EXISTS proyectogrado (
     gradoPostulacion VARCHAR(20) DEFAULT 'NO SE QUE VA ACA',
     entregaDocs BOOLEAN
 );
+
+-- POPULATE TABLES
+-- role
+INSERT INTO "role" (roleId, descripcion) VALUES
+(1, 'admin'),
+(2, 'estudiante'),
+(3, 'director'),
+(4, 'codirector'),
+(5, 'evaluador'),
+(6, 'jurado1'),
+(7, 'jurado2');

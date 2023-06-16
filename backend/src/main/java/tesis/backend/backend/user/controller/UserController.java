@@ -1,16 +1,15 @@
-package tesis.backend.backend.controller;
+package tesis.backend.backend.user.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import tesis.backend.backend.entity.User;
-import tesis.backend.backend.service.UserService;
+import tesis.backend.backend.user.entity.User;
+import tesis.backend.backend.user.service.UserService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/v1/user")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -18,11 +17,6 @@ public class UserController {
     @GetMapping("/all")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<?> addUser(@RequestBody User user) {
-        return userService.addUser(user);
     }
 
     @GetMapping("/provisionallogin/{username}/{password}")

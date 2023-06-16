@@ -14,9 +14,10 @@ public class WebSecurityConfig {
 
     // Allowed endpoints from spring security to make requests
     private static final String[] WHITE_LIST_URLS = {
-            "/user/all",
-            "/user/add",
-            "/user/provisionallogin/**",
+            "/api/v1/user/all",
+            "/api/v1/user/add",
+            "/api/v1/user/provisionallogin/**",
+            "/api/v1/registration",
     };
 
     // Configuration of spring security for building and requests actions
