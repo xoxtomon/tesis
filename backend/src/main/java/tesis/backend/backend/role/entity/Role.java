@@ -3,15 +3,19 @@ package tesis.backend.backend.role.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tesis.backend.backend.user.entity.User;
+
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "role", schema = "public")
 @NoArgsConstructor
-public class Role {
+public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "roleId")
+    @Column(name = "roleid")
     private Integer roleId;
 
     @Column(name = "descripcion")

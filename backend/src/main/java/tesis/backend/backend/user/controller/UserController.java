@@ -7,6 +7,7 @@ import tesis.backend.backend.user.entity.User;
 import tesis.backend.backend.user.service.UserService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -17,6 +18,12 @@ public class UserController {
     @GetMapping("/all")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @GetMapping("/role/{id}/{role}")
+    public String addRole(@PathVariable("id") UUID id, @PathVariable("role") Integer role) {
+        userService.addRole(id, role);
+        return "ok";
     }
 
 }
