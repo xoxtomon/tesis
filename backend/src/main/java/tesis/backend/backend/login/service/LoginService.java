@@ -30,7 +30,7 @@ public class LoginService {
                 User existingUser = optionalUser.get();
                 // Match the given password with the User's encrypted one
                 BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-                if(bcrypt.matches(login.getPassword(), existingUser.getPasswordHash())){
+                if(bcrypt.matches(login.getPassword(), existingUser.getPassword())){
                     return true;
                 }
             }

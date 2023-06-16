@@ -25,8 +25,8 @@ public class RegistrationService {
         }
 
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-        String hashedPassword = bcrypt.encode(user.getPasswordHash());
-        user.setPasswordHash(hashedPassword);
+        String hashedPassword = bcrypt.encode(user.getPassword());
+        user.setPassword(hashedPassword);
 
         User savedUser = userRepository.save(user);
 

@@ -26,7 +26,7 @@ public class User {
     private String username;
 
     @Column(name = "passwordhash")
-    private String passwordHash;
+    private String password;
 
     @Column(name = "name")
     private String name;
@@ -45,10 +45,10 @@ public class User {
     )
     private Set<Role> roles;
 
-    public User(int personalId, String username, String passwordHash, String name, String lastname, Boolean estudiante, Set<Role> roles) {
+    public User(int personalId, String username, String password, String name, String lastname, Boolean estudiante, Set<Role> roles) {
         this.personalId = personalId;
         this.username = username;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.name = name;
         this.lastname = lastname;
         this.estudiante = estudiante;
