@@ -19,8 +19,4 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/provisionallogin/{username}/{password}")
-    public Boolean addUser(@PathVariable("username") String username, @PathVariable("password") String password ) {
-        return userService.provisionalLogin(username, password);
-    }
 }
