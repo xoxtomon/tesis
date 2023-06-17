@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -13,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
@@ -24,6 +26,8 @@ public class WebSecurityConfig {
             "/api/v1/registration",
     };
     private static final String[] ADMIN_URLS = {
+            "/api/v1/user/all",
+            "/api/v1/user/role/**",
 
     };
 
@@ -38,6 +42,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(WHITE_LIST_URLS)
                 .permitAll()
+                .requestMatchers(ADMIN_URLS).hasAuthority("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
