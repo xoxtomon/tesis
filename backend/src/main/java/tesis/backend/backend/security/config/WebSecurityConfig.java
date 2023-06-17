@@ -7,13 +7,11 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@EnableWebSecurity
 @Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
@@ -24,7 +22,9 @@ public class WebSecurityConfig {
     private static final String[] WHITE_LIST_URLS = {
             "/api/v1/login",
             "/api/v1/registration",
-            "/api/v1/user/all",
+    };
+    private static final String[] ADMIN_URLS = {
+
     };
 
     // Configuration of spring security for building and requests actions
@@ -36,7 +36,8 @@ public class WebSecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers(WHITE_LIST_URLS).permitAll() // Permit these urls w/o authentication but any other request ask for auth
+                .requestMatchers(WHITE_LIST_URLS)
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -49,3 +50,4 @@ public class WebSecurityConfig {
         return http.build();
     }
 }
+

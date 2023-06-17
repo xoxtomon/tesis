@@ -12,10 +12,8 @@ import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoder;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import tesis.backend.backend.role.entity.Role;
 
 @Service
 public class JwtService {
@@ -53,6 +51,8 @@ public class JwtService {
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
+
+    public List<String> extractRoles(String token) { return extractClaim(token, claims -> claims.get("roles", List.class)); }
 
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
@@ -95,6 +95,11 @@ public class JwtService {
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    public void isAdmin(String token) {
+        List<String> roles = extractRoles(token);
+        System.out.println(roles);
     }
 
 }

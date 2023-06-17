@@ -43,7 +43,7 @@ public class User implements UserDetails {
     @Column(name = "estudiante", updatable = false)
     private Boolean estudiante;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "userroles",
             joinColumns = @JoinColumn(name = "userid"),

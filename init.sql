@@ -67,13 +67,12 @@ CREATE TABLE IF NOT EXISTS proyectogrado (
 -- POPULATE TABLES
 -- role
 INSERT INTO "role" (roleId, descripcion) VALUES
-(1, 'admin'),
-(2, 'estudiante'),
-(3, 'director'),
-(4, 'codirector'),
-(5, 'evaluador'),
-(6, 'jurado1'),
-(7, 'jurado2');
+(1, 'ADMIN'),
+(2, 'ESTUDIANTE'),
+(3, 'DIRECTOR'),
+(4, 'CODIRECTOR'),
+(5, 'EVALUADOR'),
+(6, 'JURADO');
 
 INSERT INTO "user" (userId, personalId, username, passwordHash, name, lastName, estudiante)
 VALUES

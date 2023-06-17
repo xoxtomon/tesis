@@ -1,11 +1,14 @@
 package tesis.backend.backend.security.config;
 
 import java.io.IOException;
+import java.util.List;
 
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -18,7 +21,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import tesis.backend.backend.user.entity.User;
 import tesis.backend.backend.user.service.UserService;
 
 @Component
@@ -34,12 +36,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         @NonNull HttpServletResponse response, 
         @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
+
         // Extract JWT from header for each request
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String username;
 
-        if(authHeader == null || authHeader.startsWith("Bearer ")) {
+        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -48,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         username = jwtService.extractUsername(jwt);
         // the user can be extracted from the token
         // there is no user already authenticated
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() ==null) {
+        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails user = this.userDetailsService.loadUserByUsername(username);
             // Check if username  and Token are valid
             if(jwtService.isTokenvalid(jwt, user)) {
@@ -56,7 +59,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         user,
                         null,
-                        user.getAuthorities());
+                        user.getAuthorities()
+                );
                 // Extend the Token with the request's info
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)

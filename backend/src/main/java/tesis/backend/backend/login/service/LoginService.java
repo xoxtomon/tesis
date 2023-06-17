@@ -21,43 +21,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LoginService {
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    public Boolean isUsernameAvailable(String username) {
-        Optional<User> existingUsername = userRepository.findByUsername(username);
-        return !existingUsername.isPresent();
-    }
-
-    public Boolean provisionalLogin(Login login) {
-        //Validate if the user exists by username
-        if(!isUsernameAvailable(login.getUsername())) {
-            //Get user on success
-            Optional<User> optionalUser = userRepository.findByUsername(login.getUsername());
-
-            if(optionalUser.isPresent()) {
-                //Access user's properties
-                User existingUser = optionalUser.get();
-                // Match the given password with the User's encrypted one
-                BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-                if(bcrypt.matches(login.getPassword(), existingUser.getPassword())){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     public ResponseEntity<RegistrationResponse> login(Login login) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        login.getUsername()
-                , login.getPassword()
+                        login.getUsername(),
+                        login.getPassword()
                 )
         );
-        User user = userRepository.findByUsername(login.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+        User user = userRepository.findByUsername(login.getUsername()).orElseThrow(); //() -> new UsernameNotFoundException("Usuario no encontrado")
         String jwtToken = jwtService.generateToken(user);
         RegistrationResponse response = new RegistrationResponse(jwtToken);
 

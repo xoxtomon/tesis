@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RegistrationService {
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -36,7 +36,7 @@ public class RegistrationService {
         // With encoder bean
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        UserDetails savedUser = userRepository.save(user);
+        userRepository.save(user);
 
         return ResponseEntity.status(HttpStatus.OK).body("Usuario creado satisfactoriamente");
     }
