@@ -2,6 +2,7 @@ package tesis.backend.backend.user.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tesis.backend.backend.user.entity.User;
 import tesis.backend.backend.user.service.UserService;

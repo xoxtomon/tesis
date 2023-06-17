@@ -1,6 +1,7 @@
 package tesis.backend.backend.login.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +15,8 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @PostMapping("/provisionallogin")
-    public Boolean loginUser(@RequestBody Login login) {
-        return loginService.provisionalLogin(login);
+    @PostMapping()
+    public ResponseEntity<?> loginUser(@RequestBody Login login) {
+        return loginService.login(login);
     }
 }

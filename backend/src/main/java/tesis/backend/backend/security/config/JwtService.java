@@ -1,13 +1,12 @@
 package tesis.backend.backend.security.config;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +15,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoder;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import tesis.backend.backend.role.entity.Role;
 
 @Service
 public class JwtService {
@@ -67,10 +67,16 @@ public class JwtService {
             Map<String, Object> extraClaims, // extra fields in token payload
             UserDetails userDetails
     ) {
+        // Get all authorities for a given user to add them in a custom claim
+        Set<String> roles = new HashSet<>();
+        for(GrantedAuthority authority : userDetails.getAuthorities()) {
+            roles.add(authority.getAuthority());
+        }
         return Jwts
                 .builder()
                 .setClaims(extraClaims) // Set custom fields in payload
                 .setSubject(userDetails.getUsername()) // Set Token subject
+                .claim("roles", roles) // Custom role claim
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)

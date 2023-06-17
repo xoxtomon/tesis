@@ -1,5 +1,6 @@
 package tesis.backend.backend.registration.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,18 +16,13 @@ import tesis.backend.backend.user.respository.UserRepository;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class RegistrationService {
     @Autowired
     private UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
-    private JwtService jwtService;
-
-    public RegistrationService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
-    }
+    private final JwtService jwtService;
 
     public ResponseEntity<?> register(User user) {
         if(!isAlreadyRegistered(user.getPersonalId())) {
@@ -37,16 +33,12 @@ public class RegistrationService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El nombre de usuario no está disponible.");
         }
 
-        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-        String hashedPassword = bcrypt.encode(user.getPassword());
         // With encoder bean
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         UserDetails savedUser = userRepository.save(user);
-        String jwtToken = jwtService.generateToken(savedUser);
-        RegistrationResponse response = new RegistrationResponse(jwtToken);
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body("Usuario creado satisfactoriamente");
     }
 
     public Boolean isUsernameAvailable(String username) {
