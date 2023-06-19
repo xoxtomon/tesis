@@ -14,6 +14,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import tesis.backend.backend.user.entity.User;
 
 @Service
 public class JwtService {
@@ -59,13 +60,13 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(User userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
     public String generateToken(
             Map<String, Object> extraClaims, // extra fields in token payload
-            UserDetails userDetails
+            User userDetails
     ) {
         // Get all authorities for a given user to add them in a custom claim
         Set<String> roles = new HashSet<>();
@@ -76,6 +77,7 @@ public class JwtService {
                 .builder()
                 .setClaims(extraClaims) // Set custom fields in payload
                 .setSubject(userDetails.getUsername()) // Set Token subject
+                .claim("id", userDetails.getUserId()) // Custom claim to get subject uuid
                 .claim("roles", roles) // Custom role claim
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
@@ -96,10 +98,4 @@ public class JwtService {
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
-
-    public void isAdmin(String token) {
-        List<String> roles = extractRoles(token);
-        System.out.println(roles);
-    }
-
 }

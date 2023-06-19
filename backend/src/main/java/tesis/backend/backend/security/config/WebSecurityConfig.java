@@ -24,13 +24,28 @@ public class WebSecurityConfig {
     private static final String[] WHITE_LIST_URLS = {
             "/api/v1/login",
             "/api/v1/registration",
+            "/api/v1/demo/white",
     };
     private static final String[] ADMIN_URLS = {
             "/api/v1/user/all",
             "/api/v1/user/role/**",
+            "/api/v1/demo/admin",
 
     };
 
+    private static final String[] EVALUADOR_URLS = {
+            "/api/v1/demo/evaluador",
+    };
+
+    // Cannot duplicate in both ADMIN and EVALUADOR because then,
+    // only the first authority in the matchers is taken into account
+    private static final String[] ADMIN_EVALUADOR_URLS = {
+            "/api/v1/demo/adminevaluador",
+    };
+
+    private static final String[] ESTUDIANTE_URLS = {
+            "/api/v1/demo/estudiante",
+    };
     // Configuration of spring security for building and requests actions
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -43,6 +58,9 @@ public class WebSecurityConfig {
                 .requestMatchers(WHITE_LIST_URLS)
                 .permitAll()
                 .requestMatchers(ADMIN_URLS).hasAuthority("ADMIN")
+                .requestMatchers(EVALUADOR_URLS).hasAuthority("EVALUADOR")
+                .requestMatchers(ESTUDIANTE_URLS).hasAuthority("ESTUDIANTE")
+                .requestMatchers(ADMIN_EVALUADOR_URLS).hasAnyAuthority("ADMIN","EVALUADOR" )
                 .anyRequest()
                 .authenticated()
                 .and()

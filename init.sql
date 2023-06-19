@@ -69,13 +69,4 @@ CREATE TABLE IF NOT EXISTS proyectogrado (
 INSERT INTO "role" (roleId, descripcion) VALUES
 (1, 'ADMIN'),
 (2, 'ESTUDIANTE'),
-(3, 'DIRECTOR'),
-(4, 'CODIRECTOR'),
-(5, 'EVALUADOR'),
-(6, 'JURADO');
-
-INSERT INTO "user" (userId, personalId, username, passwordHash, name, lastName, estudiante)
-VALUES
-    ('2b5a1f83-0633-4f1b-9f7c-1a3e790cbf3d', 123456789, 'john_doe', 'password{john_doe}', 'John', 'Doe', true),
-    ('a3f984c6-58e1-45cc-b29f-df6b45f8b283', 987654321, 'jane_smith', 'password{jane_smith}', 'Jane', 'Smith', false),
-    ('c0be2681-1f7e-4ef4-9e94-6d646ae8b4d2', 555555555, 'bob_johnson', 'password{bob_johnson}', 'Bob', 'Johnson', true);
+(3, 'EVALUADOR');
