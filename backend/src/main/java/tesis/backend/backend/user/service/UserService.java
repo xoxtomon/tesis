@@ -7,7 +7,6 @@ import tesis.backend.backend.role.repository.RoleRepository;
 import tesis.backend.backend.user.entity.User;
 import tesis.backend.backend.user.respository.UserRepository;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;

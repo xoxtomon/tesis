@@ -1,11 +1,8 @@
 package tesis.backend.backend.user.controller;
 
-import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import tesis.backend.backend.role.entity.Role;
 import tesis.backend.backend.user.entity.User;
 import tesis.backend.backend.user.service.UserService;
 
@@ -17,6 +14,7 @@ import java.util.UUID;
 public class UserController {
     @Autowired
     private UserService userService;
+    
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsers() {

@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS anteproyecto (
 );
 
 CREATE TABLE IF NOT EXISTS autores (
-    autoresId UUID PRIMARY KEY NOT NULL,
     anteproyectoId UUID NOT NULL,
     userId UUID NOT NULL,
     FOREIGN KEY (anteproyectoId) REFERENCES anteproyecto(anteproyectoId),
@@ -46,7 +45,6 @@ CREATE TABLE IF NOT EXISTS userroles (
 );
 
 CREATE TABLE IF NOT EXISTS evaluadores (
-    evaluadoresId UUID PRIMARY KEY NOT NULL,
     anteproyectoId UUID NOT NULL,
     userId UUID NOT NULL,
     FOREIGN KEY (anteproyectoId) REFERENCES anteproyecto(anteproyectoId),
@@ -70,3 +68,8 @@ INSERT INTO "role" (roleId, descripcion) VALUES
 (1, 'ADMIN'),
 (2, 'ESTUDIANTE'),
 (3, 'EVALUADOR');
+-- estado
+INSERT INTO "estado" (estadoId, descripcion) VALUES
+(1, 'APROBADO'),
+(2, 'NO APROBADO'),
+(3, 'PENDIENTE');

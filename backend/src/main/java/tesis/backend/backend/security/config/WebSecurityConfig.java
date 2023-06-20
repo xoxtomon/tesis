@@ -29,6 +29,7 @@ public class WebSecurityConfig {
     private static final String[] ADMIN_URLS = {
             "/api/v1/user/all",
             "/api/v1/user/role/**",
+            "/api/v1/anteproyecto/**",
             "/api/v1/demo/admin",
 
     };

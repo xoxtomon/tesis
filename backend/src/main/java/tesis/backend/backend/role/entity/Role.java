@@ -1,12 +1,9 @@
 package tesis.backend.backend.role.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.NoArgsConstructor;
-import tesis.backend.backend.user.entity.User;
 
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @Table(name = "role", schema = "public")

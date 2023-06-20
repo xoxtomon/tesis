@@ -6,16 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import tesis.backend.backend.login.entity.Login;
 import tesis.backend.backend.registration.response.RegistrationResponse;
 import tesis.backend.backend.security.config.JwtService;
 import tesis.backend.backend.user.entity.User;
 import tesis.backend.backend.user.respository.UserRepository;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
