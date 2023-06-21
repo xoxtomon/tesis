@@ -1,5 +1,6 @@
 package tesis.backend.backend.anteproyecto.service;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import tesis.backend.backend.anteproyecto.entity.Anteproyecto;
 import tesis.backend.backend.anteproyecto.repository.AnteproyectoRepository;
+import tesis.backend.backend.role.entity.Role;
 import tesis.backend.backend.user.entity.User;
 import tesis.backend.backend.user.respository.UserRepository;
 
@@ -37,10 +39,19 @@ public class AnteproyectoService {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAnteproyecto);
     }
 
+    public ResponseEntity<String> deleteAnteproyecto(UUID id) {
+        try {
+            anteproyectoRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anteproyecto borrado exitosamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Anteproyecto no pudo ser borrado");
+        }
+    }
+
     public ResponseEntity<String> addAutorToAnteproyecto(UUID idAutor, UUID idAnteproyecto) {
         // Busco un anteproyecto por el uuid de usuario, si encuentro no puedo asociarlo
         // Pues el autor ya tiene un anteproyecto asociado.
-        Optional<Anteproyecto> optionalAnteproyectoByAutor = anteproyectoRepository.findByAutorId(idAnteproyecto);
+        Optional<Anteproyecto> optionalAnteproyectoByAutor = anteproyectoRepository.findByAutorId(idAutor);
         if(optionalAnteproyectoByAutor.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El autor ya tiene un proyecto asociado.");
         }
@@ -49,7 +60,6 @@ public class AnteproyectoService {
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(idAnteproyecto);
         if (optionalAnteproyecto.isPresent()) {
             
-
             Optional<User> optionalAutor = userRepository.findById(idAutor);
             if(optionalAutor.isPresent()) {
                 // Obtener El anteproyecto y los usuarios de ese anteproyecto
@@ -57,6 +67,11 @@ public class AnteproyectoService {
                 Set<User> autores = anteproyecto.getAutores();
                 // Obtener el usuario del uuid y agregarlo al Set
                 User autor = optionalAutor.get();
+                
+                // Si Tiene más de un Rol o el Rol que tiene no es de estudiante no debe poder agregarse como Autor
+                if(!hasOneRole(autor)){ return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El Usuario tiene más de un rol"); }
+                if(!hasRoleStudent(autor)) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El Usuario no tiene el rol de ESTUDIANTE."); }
+
                 autores.add(autor);
                 anteproyecto.setAutores(autores);
 
@@ -68,5 +83,49 @@ public class AnteproyectoService {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fallo al adicionar autor");
     }
     
+    public ResponseEntity<String> deleteAutor(UUID idAutor, UUID idanteproyecto) {
+        Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(idanteproyecto);
+        Optional<User> optionalUser = userRepository.findById(idAutor);
+        // Validar que el Anteproyecto y el usuario existan
+        if(!optionalAnteproyecto.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Anteproyecto no encontrado");
+        }
+        if(!optionalUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuario no encontrado");
+        }
+        Anteproyecto anteproyecto = optionalAnteproyecto.get();
+        User usuario = optionalUser.get();
+        // Validar que el usuario es autor del anteproyecto
+        Set<User> autores = anteproyecto.getAutores();
+        if(!autores.contains(usuario)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no es autor del anteproyecto");
+        }
+        // Borrar y guardar el nuevo conjunto de usuarios en el anteproyecto
+        // Guardar el nuevo Anteproyecto en el repositorio
+        autores.remove(usuario);
+        anteproyecto.setAutores(autores);
+        anteproyectoRepository.save(anteproyecto);
 
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Autor borrado existosamente");
+    }
+
+    // UTIL
+    private Boolean hasRoleStudent(User user) {
+        Iterator<Role> itr = user.getRoles().iterator();
+        while(itr.hasNext()) {
+            String descripcion = itr.next().getDescripcion();
+            System.out.println(descripcion);
+            if(!descripcion.equals("ESTUDIANTE")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Boolean hasOneRole(User user) {
+        if(user.getRoles().size() != 1) {
+            return false;
+        }
+        return true;
+    }
 }

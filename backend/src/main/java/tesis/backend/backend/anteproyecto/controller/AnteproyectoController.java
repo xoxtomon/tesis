@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,11 +35,23 @@ public class AnteproyectoController {
     public ResponseEntity<?> addAnteproyecto(@RequestBody() Anteproyecto anteproyecto) {
         return anteproyectoService.addAnteproyecto(anteproyecto);
     }
+    
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> delteAnteproyecto(@PathVariable("id") UUID id) {
+        return anteproyectoService.deleteAnteproyecto(id);
+    }
 
     @GetMapping("/add/autor/{idAutor}/{idanteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> addAutorToAnteproyecto(@PathVariable("idAutor") UUID idAutor, @PathVariable("idanteproyectos") UUID idAnteproyecto) {
+    public ResponseEntity<String> addAutorToAnteproyecto(@PathVariable("idAutor") UUID idAutor, @PathVariable("idanteproyecto") UUID idAnteproyecto) {
         return anteproyectoService.addAutorToAnteproyecto(idAutor, idAnteproyecto);
+    }
+    
+    @DeleteMapping("/delete/autor/{idAutor}/{idanteproyecto}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> deleteAutor(@PathVariable("idAutor") UUID idAutor, @PathVariable("idanteproyecto") UUID idAnteproyecto) {
+        return anteproyectoService.deleteAutor(idAutor, idAnteproyecto);
     }
     
 }
