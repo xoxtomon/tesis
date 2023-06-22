@@ -33,6 +33,8 @@ public class WebSecurityConfig {
             "/api/v1/anteproyecto",
             "/api/v1/anteproyecto/add/**",
             "/api/v1/anteproyecto/delete/**",
+            "/api/v1/proyecto",
+            "/api/v1/proyecto/all",
 
     };
 

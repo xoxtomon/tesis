@@ -1,7 +1,11 @@
 package tesis.backend.backend.proyecto.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +20,15 @@ public class ProyectoController {
     @Autowired
     private ProyectoService proyectoService;
 
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<Proyecto> getProyectos() {
+        return proyectoService.getProyectos();
+    }
+
     @PostMapping()
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> addProyecto(@RequestBody() Proyecto proyecto) {
-        System.out.println(proyecto);
         return proyectoService.addProyecto(proyecto);
     }
 }

@@ -1,5 +1,6 @@
 package tesis.backend.backend.proyecto.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,5 +35,9 @@ public class ProyectoService {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Proyecto no pudo ser creado.");
         }
+    }
+
+    public List<Proyecto> getProyectos() {
+        return proyectoRepository.findAll(); 
     }
 }
