@@ -1,6 +1,7 @@
 package tesis.backend.backend.user.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tesis.backend.backend.user.entity.User;
@@ -19,6 +20,12 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
+    }
+    
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> deleteById(@PathVariable("id") UUID id) {
+        return userService.deletebyId(id);
     }
 
     @GetMapping("/role/{id}/{role}")

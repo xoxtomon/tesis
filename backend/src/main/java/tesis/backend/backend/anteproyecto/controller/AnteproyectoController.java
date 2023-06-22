@@ -54,4 +54,10 @@ public class AnteproyectoController {
         return anteproyectoService.deleteAutor(idAutor, idAnteproyecto);
     }
     
+    @GetMapping("/estado/{estado}/{idAnte}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> changeEstado(@PathVariable("estado") Integer estado, @PathVariable("idAnte") UUID id) {
+        return anteproyectoService.changeEstado(estado, id);
+    }
+    
 }

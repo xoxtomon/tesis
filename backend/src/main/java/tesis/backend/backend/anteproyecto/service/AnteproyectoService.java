@@ -109,6 +109,21 @@ public class AnteproyectoService {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Autor borrado existosamente");
     }
 
+    public ResponseEntity<String> changeEstado(Integer estado, UUID id) {
+        Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(id);
+        if(!optionalAnteproyecto.isPresent()) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Anteproyecto no encontrado."); }
+        
+        Anteproyecto ante = optionalAnteproyecto.get();
+        try {
+            ante.setEstado(estado);
+            anteproyectoRepository.save(ante);
+            return ResponseEntity.status(HttpStatus.OK).body("Estado cambiado satisfactoriamente.");
+        } catch (Exception e) {
+            // TODO: handle exception
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El estado enviado no existe.");
+        }
+    }
+
     // UTIL
     private Boolean hasRoleStudent(User user) {
         Iterator<Role> itr = user.getRoles().iterator();
