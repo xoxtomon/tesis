@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -50,6 +51,14 @@ public class Anteproyecto {
             inverseJoinColumns = @JoinColumn(name = "userid")
     )
     private Set<User> autores;
+
+    @ManyToMany
+    @JoinTable(
+            name = "evaluadores",
+            joinColumns = @JoinColumn(name = "anteproyectoid"),
+            inverseJoinColumns = @JoinColumn(name = "userid")
+    )
+    private Set<User> evaluadores;
 
     public Anteproyecto(Integer noRadicacion, String titulo, Date fechaEntregaAEvaluador, Date fechaEntregaDeEvaluador,
             Integer estado) {

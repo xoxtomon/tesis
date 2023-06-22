@@ -42,6 +42,7 @@ public class AnteproyectoController {
         return anteproyectoService.deleteAnteproyecto(id);
     }
 
+    // AUTOR
     @GetMapping("/add/autor/{idAutor}/{idanteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> addAutorToAnteproyecto(@PathVariable("idAutor") UUID idAutor, @PathVariable("idanteproyecto") UUID idAnteproyecto) {
@@ -54,6 +55,14 @@ public class AnteproyectoController {
         return anteproyectoService.deleteAutor(idAutor, idAnteproyecto);
     }
     
+    // EVALUADOR
+    @GetMapping("/add/evaluador/{idEvaluador}/{idanteproyecto}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> addEvaluadorToAnteproyecto(@PathVariable("idEvaluador") UUID idEvaluador, @PathVariable("idanteproyecto") UUID idAnteproyecto) {
+        return anteproyectoService.addEvaluadorToAnteproyecto(idEvaluador, idAnteproyecto);
+    }
+
+    // ESTADO
     @GetMapping("/estado/{estado}/{idAnte}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> changeEstado(@PathVariable("estado") Integer estado, @PathVariable("idAnte") UUID id) {

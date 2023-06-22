@@ -109,6 +109,31 @@ public class AnteproyectoService {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Autor borrado existosamente");
     }
 
+    public ResponseEntity<String> addEvaluadorToAnteproyecto(UUID idEvaluador, UUID idAnteproyecto) {
+        // VALIDACION DE EXISTENCIA DE ANTEPROYECTO Y USUARIO
+        Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(idAnteproyecto);
+        if(!optionalAnteproyecto.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Anteproyecto no encontrado.");
+        }
+        Optional<User> optionalEvaluador = userRepository.findById(idEvaluador);
+        if(!optionalEvaluador.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Evaluador no encontrado.");
+        }
+
+        // VALIDACIONES DE ROLES DE USUARIO
+        User evaluador = optionalEvaluador.get();
+        if(!hasRoleEvaluador(evaluador)) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no tiene el rol evaluador"); }
+        if(hasRoleStudent(evaluador)) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Los evaluadores no pueden tener el rol de ESTUDIANTE"); }
+
+        Anteproyecto ante = optionalAnteproyecto.get();
+        Set<User> evaluadores = ante.getEvaluadores();
+        evaluadores.add(evaluador);
+        ante.setEvaluadores(evaluadores);
+        anteproyectoRepository.save(ante);
+        
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Evaluador agregado existosamente.");
+    }
+    
     public ResponseEntity<String> changeEstado(Integer estado, UUID id) {
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(id);
         if(!optionalAnteproyecto.isPresent()) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Anteproyecto no encontrado."); }
@@ -125,16 +150,27 @@ public class AnteproyectoService {
     }
 
     // UTIL
+    // CHECK
     private Boolean hasRoleStudent(User user) {
         Iterator<Role> itr = user.getRoles().iterator();
         while(itr.hasNext()) {
             String descripcion = itr.next().getDescripcion();
-            System.out.println(descripcion);
-            if(!descripcion.equals("ESTUDIANTE")) {
-                return false;
+            if(descripcion.equals("ESTUDIANTE")) {
+                return true;
             }
         }
-        return true;
+        return false;
+    }
+
+    private Boolean hasRoleEvaluador(User user) {
+        Iterator<Role> itr = user.getRoles().iterator();
+        while(itr.hasNext()) {
+            String descripcion = itr.next().getDescripcion();
+            if(descripcion.equals("EVALUADOR")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private Boolean hasOneRole(User user) {
