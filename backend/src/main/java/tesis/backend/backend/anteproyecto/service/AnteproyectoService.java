@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -134,6 +133,32 @@ public class AnteproyectoService {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Evaluador agregado existosamente.");
     }
     
+    public ResponseEntity<String> deleteEvaluador(UUID idEvaluador, UUID idAnteproyecto) {
+        // VALIDAR EXISTENCIA DEL ANTEPROYECTO Y EVALUADOR
+        Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(idAnteproyecto);
+        if(!optionalAnteproyecto.isPresent()) { 
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se encontró el anteproyecto.");
+        }
+        Optional<User> optionalUser = userRepository.findById(idEvaluador);
+        if(!optionalUser.isPresent()) { 
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se encontró el usuario.");
+        }
+        Anteproyecto ante = optionalAnteproyecto.get();
+        User evaluador = optionalUser.get();
+        
+        // VALIDAR QUE EL USUARIO SEA EVALUADOR DEL ANTEPROYECTO
+        Set<User> evaluadores = ante.getEvaluadores();
+        if(!evaluadores.contains(evaluador)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no es evaluador del anteproyecto.");
+        }
+        
+        evaluadores.remove(evaluador);
+        ante.setEvaluadores(evaluadores);
+        anteproyectoRepository.save(ante);
+        
+        return ResponseEntity.status(HttpStatus.OK).body("El evaluador fue eliminado del anteproyecto.");
+    }
+
     public ResponseEntity<String> changeEstado(Integer estado, UUID id) {
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(id);
         if(!optionalAnteproyecto.isPresent()) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Anteproyecto no encontrado."); }

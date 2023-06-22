@@ -62,6 +62,12 @@ public class AnteproyectoController {
         return anteproyectoService.addEvaluadorToAnteproyecto(idEvaluador, idAnteproyecto);
     }
 
+    @DeleteMapping("/delete/evaluador/{idEvaluador}/{idanteproyecto}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> deleteEvaluador(@PathVariable("idEvaluador") UUID idEvaluador, @PathVariable("idanteproyecto") UUID idAnteproyecto) {
+        return anteproyectoService.deleteEvaluador(idEvaluador, idAnteproyecto);
+    }
+
     // ESTADO
     @GetMapping("/estado/{estado}/{idAnte}")
     @PreAuthorize("hasAuthority('ADMIN')")
