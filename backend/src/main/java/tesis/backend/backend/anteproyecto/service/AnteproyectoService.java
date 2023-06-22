@@ -1,5 +1,6 @@
 package tesis.backend.backend.anteproyecto.service;
 
+import java.sql.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -157,6 +159,30 @@ public class AnteproyectoService {
         anteproyectoRepository.save(ante);
         
         return ResponseEntity.status(HttpStatus.OK).body("El evaluador fue eliminado del anteproyecto.");
+    }
+
+    public ResponseEntity<String> addFechaEntrega(UUID id, Date date) {
+        Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(id);
+        if(!optionalAnteproyecto.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El anteproyecto no existe.");
+        }
+        Anteproyecto ante = optionalAnteproyecto.get();
+        ante.setFechaEntregaAEvaluador(date);
+        anteproyectoRepository.save(ante);
+        
+        return ResponseEntity.status(HttpStatus.OK).body("Fecha de entrega agregada existosamente.");
+    }
+    
+    public ResponseEntity<String> addFechaDevolucion(UUID id, Date date) {
+        Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(id);
+        if(!optionalAnteproyecto.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El anteproyecto no existe.");
+        }
+        Anteproyecto ante = optionalAnteproyecto.get();
+        ante.setFechaEntregaDeEvaluador(date);
+        anteproyectoRepository.save(ante);
+        
+        return ResponseEntity.status(HttpStatus.OK).body("Fecha de devolución agregada existosamente.");
     }
 
     public ResponseEntity<String> changeEstado(Integer estado, UUID id) {

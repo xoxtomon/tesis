@@ -68,5 +68,11 @@ public class Anteproyecto {
         this.fechaEntregaDeEvaluador = fechaEntregaDeEvaluador;
         this.estado = estado;
     }
+    
+    public Anteproyecto(Integer noRadicacion, String titulo, Integer estado) {
+        this.noRadicacion = noRadicacion;
+        this.titulo = titulo;
+        this.estado = estado;
+    }
 
 }
