@@ -3,6 +3,8 @@ package tesis.backend.backend.proyecto.entity;
 import java.sql.Date;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,12 +36,12 @@ public class Proyecto {
     
     @Column(name = "nroacta")
     private Integer nroActa;
-    
+   
     @Column(name = "mencionhonor")
     private Boolean mencionHonor;
 
     @Column(name = "gradopostulacion")
-    private String gradoPostulacion;
+    private Date gradoPostulacion;
     
     @Column(name = "entregadocs")
     private Boolean entregaDocs;

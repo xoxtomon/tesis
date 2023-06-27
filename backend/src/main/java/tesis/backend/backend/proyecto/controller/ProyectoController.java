@@ -1,12 +1,16 @@
 package tesis.backend.backend.proyecto.controller;
 
+import java.sql.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,5 +34,41 @@ public class ProyectoController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> addProyecto(@RequestBody() Proyecto proyecto) {
         return proyectoService.addProyecto(proyecto);
+    }
+    
+    @PutMapping("/set/sustentacion/{id}/{date}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> setFechaSustentacion(@PathVariable("id") UUID id, @PathVariable("date") Date date) {
+        return proyectoService.setFechaSustentacion(id, date);
+    }
+    
+    @PutMapping("/set/definitiva/{id}/{nota}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> setFechaSustentacion(@PathVariable("id") UUID id, @PathVariable("nota") Float nota) {
+        return proyectoService.setNotaDefinitiva(id, nota);
+    }
+    
+    @PutMapping("/set/acta/{id}/{acta}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> setFechaSustentacion(@PathVariable("id") UUID id, @PathVariable("acta") Integer acta) {
+        return proyectoService.setNroActa(id, acta);
+    }
+    
+    @PutMapping("/set/mencion/{id}/{mencion}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> setMencionHonor(@PathVariable("id") UUID id, @PathVariable("mencion") Boolean mencion) {
+        return proyectoService.setMencionHonor(id, mencion);
+    }
+    
+    @PutMapping("/set/postulacion/{id}/{fecha}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> setPostulacion(@PathVariable("id") UUID id, @PathVariable("fecha") Date fecha) {
+        return proyectoService.setPostulacion(id, fecha);
+    }
+    
+    @PutMapping("/set/docs/{id}/{docs}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> setEntregaDocs(@PathVariable("id") UUID id, @PathVariable("docs") Boolean docs) {
+        return proyectoService.setEntregaDocs(id, docs);
     }
 }

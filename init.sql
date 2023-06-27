@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS proyectogrado (
     notaDefinitiva NUMERIC(3,2) CHECK (notaDefinitiva BETWEEN 0.00 AND 5.00),
     nroActa INTEGER,
     mencionHonor BOOLEAN,
-    gradoPostulacion VARCHAR(20) DEFAULT 'NO SE QUE VA ACA',
+    gradoPostulacion DATE,
     entregaDocs BOOLEAN
 );
 
@@ -73,3 +73,15 @@ INSERT INTO "estado" (estadoId, descripcion) VALUES
 (1, 'APROBADO'),
 (2, 'NO APROBADO'),
 (3, 'PENDIENTE');
+--anteproyecto
+INSERT INTO anteproyecto (anteproyectoId, noRadicacion, titulo, fechaEntregaAEvaluador, fechaEntregaDeEvaluador, estado)
+VALUES 
+  ('2ac26b16-2b57-4fa7-b690-7dd986501a83', 1001, 'Título 1', '2023-06-01', '2023-06-05', 1),
+  ('c1587360-8590-415a-8e92-66262598f0d3', 1002, 'Título 2', '2023-06-02', '2023-06-06', 2),
+  ('3b25162a-274d-4c6b-bd2d-b5b1f83d3b74', 1003, 'Título 3', '2023-06-03', '2023-06-07', 3);
+--proyecto
+INSERT INTO proyectogrado (proyectoId, anteproyectoId, fechaSustentacion, notaDefinitiva, nroActa, mencionHonor, gradoPostulacion, entregaDocs)
+VALUES 
+  ('7c0e8e21-f712-4b55-b930-491f6e32c587', '2ac26b16-2b57-4fa7-b690-7dd986501a83', '2023-07-01', 4.75, 123, TRUE, '2023-01-01', TRUE),
+  ('5e95191d-3f7f-4e19-ae48-7d1e15586b92', 'c1587360-8590-415a-8e92-66262598f0d3', '2023-07-02', 3.50, 456, FALSE, '2023-01-01', FALSE),
+  ('c08419e9-1d74-4b70-ba89-4f748ea7b42f', '3b25162a-274d-4c6b-bd2d-b5b1f83d3b74', '2023-07-03', 4.20, 789, TRUE, '2023-01-01', TRUE);
