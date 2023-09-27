@@ -25,3 +25,9 @@ replay_pid*
 
 #INTELLIJ
 *.idea
+
+# Docker Compose
+docker-compose.yml
+
+# SQL init file
+init.sql
