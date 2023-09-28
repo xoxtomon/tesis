@@ -25,10 +25,10 @@ public class ProyectoService {
     public ResponseEntity<String> addProyecto(Proyecto proyecto) {
         // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
         Optional<Anteproyecto> optionalAnte = anteproyectoRepository.findById(proyecto.getAnteproyectoId());
-        if(!optionalAnte.isPresent()) {
+        if (!optionalAnte.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No existe el Id del anteproyecto");
         }
-        
+
         // GUARDAR EL PROYECTO
         try {
             proyectoRepository.save(proyecto);
@@ -39,16 +39,16 @@ public class ProyectoService {
     }
 
     public List<Proyecto> getProyectos() {
-        return proyectoRepository.findAll(); 
+        return proyectoRepository.findAll();
     }
 
     public ResponseEntity<String> setFechaSustentacion(UUID id, Date date) {
         // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
         Optional<Proyecto> optionalProyecto = proyectoRepository.findById(id);
-        if(!optionalProyecto.isPresent()) {
+        if (!optionalProyecto.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo encontrar el proyecto.");
         }
-        
+
         try {
             Proyecto proyecto = optionalProyecto.get();
             proyecto.setFechaSustentacion(date);
@@ -58,16 +58,17 @@ public class ProyectoService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo modificar la fecha.");
         }
     }
-    
+
     public ResponseEntity<String> setNotaDefinitiva(UUID id, Float nota) {
         // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
         Optional<Proyecto> optionalProyecto = proyectoRepository.findById(id);
-        if(!optionalProyecto.isPresent()) {
+        if (!optionalProyecto.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo encontrar el proyecto.");
         }
 
-        if(nota > 5 || nota < 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La nota proporcionada no está en el rango adecuado.");
+        if (nota > 5 || nota < 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("La nota proporcionada no está en el rango adecuado.");
         }
 
         try {
@@ -84,10 +85,10 @@ public class ProyectoService {
     public ResponseEntity<String> setNroActa(UUID id, Integer acta) {
         // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
         Optional<Proyecto> optionalProyecto = proyectoRepository.findById(id);
-        if(!optionalProyecto.isPresent()) {
+        if (!optionalProyecto.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo encontrar el proyecto.");
         }
-        
+
         try {
             Proyecto proyecto = optionalProyecto.get();
             proyecto.setNroActa(acta);
@@ -98,14 +99,14 @@ public class ProyectoService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo modificar el número de acta.");
         }
     }
-    
+
     public ResponseEntity<String> setMencionHonor(UUID id, Boolean mencion) {
         // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
         Optional<Proyecto> optionalProyecto = proyectoRepository.findById(id);
-        if(!optionalProyecto.isPresent()) {
+        if (!optionalProyecto.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo encontrar el proyecto.");
         }
-        
+
         try {
             Proyecto proyecto = optionalProyecto.get();
             proyecto.setMencionHonor(mencion);
@@ -113,17 +114,18 @@ public class ProyectoService {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Mención de Honor modificada exitosamente.");
         } catch (Exception e) {
             // TODO: handle exception
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo modificar el estado de mención de honor.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("No se pudo modificar el estado de mención de honor.");
         }
     }
-    
+
     public ResponseEntity<String> setPostulacion(UUID id, Date date) {
         // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
         Optional<Proyecto> optionalProyecto = proyectoRepository.findById(id);
-        if(!optionalProyecto.isPresent()) {
+        if (!optionalProyecto.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo encontrar el proyecto.");
         }
-        
+
         try {
             Proyecto proyecto = optionalProyecto.get();
             proyecto.setGradoPostulacion(date);
@@ -134,14 +136,14 @@ public class ProyectoService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo modificar la fecha de postulación.");
         }
     }
-    
+
     public ResponseEntity<String> setEntregaDocs(UUID id, Boolean entregas) {
         // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
         Optional<Proyecto> optionalProyecto = proyectoRepository.findById(id);
-        if(!optionalProyecto.isPresent()) {
+        if (!optionalProyecto.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo encontrar el proyecto.");
         }
-        
+
         try {
             Proyecto proyecto = optionalProyecto.get();
             proyecto.setEntregaDocs(entregas);
@@ -150,6 +152,24 @@ public class ProyectoService {
         } catch (Exception e) {
             // TODO: handle exception
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo modificar la entrega de documentos.");
+        }
+    }
+
+    public ResponseEntity<String> setFechaCreacion(UUID id, Date date) {
+        // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
+        Optional<Proyecto> optionalProyecto = proyectoRepository.findById(id);
+        if (!optionalProyecto.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo encontrar el proyecto.");
+        }
+
+        try {
+            Proyecto proyecto = optionalProyecto.get();
+            proyecto.setFechaCreacion(date);
+            proyectoRepository.save(proyecto);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Fecha de Creación cambiada exitosamente.");
+        } catch (Exception e) {
+            // TODO: handle exception
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo modificar la fecha de creación.");
         }
     }
 }

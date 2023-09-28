@@ -75,4 +75,9 @@ public class ProyectoController {
     }
 
     // TODO put method for fechacreacion
+    @PutMapping("/fecha-creacion/{id}/{fecha}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> setFechaCreacion(@PathVariable("id") UUID id, @PathVariable("fecha") Date fecha) {
+        return proyectoService.setFechaCreacion(id, fecha);
+    }
 }
