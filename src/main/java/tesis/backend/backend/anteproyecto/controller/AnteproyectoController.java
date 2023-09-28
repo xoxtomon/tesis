@@ -32,62 +32,69 @@ public class AnteproyectoController {
         return anteproyectoService.getAllAnteproyectos();
     }
 
-    @PostMapping("/add")
+    @PostMapping()
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> addAnteproyecto(@RequestBody() Anteproyecto anteproyecto) {
         return anteproyectoService.addAnteproyecto(anteproyecto);
     }
-    
-    @DeleteMapping("/delete/{id}")
+
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteAnteproyecto(@PathVariable("id") UUID id) {
         return anteproyectoService.deleteAnteproyecto(id);
     }
 
     // AUTOR
-    @GetMapping("/add/autor/{idAutor}/{idanteproyecto}")
+    @PostMapping("/autor/{idAutor}/{idanteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> addAutorToAnteproyecto(@PathVariable("idAutor") UUID idAutor, @PathVariable("idanteproyecto") UUID idAnteproyecto) {
+    public ResponseEntity<String> addAutorToAnteproyecto(@PathVariable("idAutor") UUID idAutor,
+            @PathVariable("idanteproyecto") UUID idAnteproyecto) {
         return anteproyectoService.addAutorToAnteproyecto(idAutor, idAnteproyecto);
     }
-    
-    @DeleteMapping("/delete/autor/{idAutor}/{idanteproyecto}")
+
+    @DeleteMapping("/autor/{idAutor}/{idanteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> deleteAutor(@PathVariable("idAutor") UUID idAutor, @PathVariable("idanteproyecto") UUID idAnteproyecto) {
+    public ResponseEntity<String> deleteAutor(@PathVariable("idAutor") UUID idAutor,
+            @PathVariable("idanteproyecto") UUID idAnteproyecto) {
         return anteproyectoService.deleteAutor(idAutor, idAnteproyecto);
     }
-    
+
     // EVALUADOR
-    @GetMapping("/add/evaluador/{idEvaluador}/{idanteproyecto}")
+    @PostMapping("/evaluador/{idEvaluador}/{idanteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> addEvaluadorToAnteproyecto(@PathVariable("idEvaluador") UUID idEvaluador, @PathVariable("idanteproyecto") UUID idAnteproyecto) {
+    public ResponseEntity<String> addEvaluadorToAnteproyecto(@PathVariable("idEvaluador") UUID idEvaluador,
+            @PathVariable("idanteproyecto") UUID idAnteproyecto) {
         return anteproyectoService.addEvaluadorToAnteproyecto(idEvaluador, idAnteproyecto);
     }
 
-    @DeleteMapping("/delete/evaluador/{idEvaluador}/{idanteproyecto}")
+    @DeleteMapping("/evaluador/{idEvaluador}/{idanteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> deleteEvaluador(@PathVariable("idEvaluador") UUID idEvaluador, @PathVariable("idanteproyecto") UUID idAnteproyecto) {
+    public ResponseEntity<String> deleteEvaluador(@PathVariable("idEvaluador") UUID idEvaluador,
+            @PathVariable("idanteproyecto") UUID idAnteproyecto) {
         return anteproyectoService.deleteEvaluador(idEvaluador, idAnteproyecto);
     }
-    
+
     // FECHA
     @PutMapping("/fecha/entrega/{id}/{fecha}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> addFechaEntrega(@PathVariable("id") UUID id, @PathVariable("fecha") Date date) {
         return anteproyectoService.addFechaEntrega(id, date);
     }
-    
+
     @PutMapping("/fecha/devolucion/{id}/{fecha}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> addFechaDevolucion(@PathVariable("id") UUID id, @PathVariable("fecha") Date date) {
         return anteproyectoService.addFechaDevolucion(id, date);
     }
 
+    // TODO add put method for fechacreacion
+
     // ESTADO
     @PutMapping("/estado/{estado}/{idAnte}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> changeEstado(@PathVariable("estado") Integer estado, @PathVariable("idAnte") UUID id) {
+    public ResponseEntity<String> changeEstado(@PathVariable("estado") Integer estado,
+            @PathVariable("idAnte") UUID id) {
         return anteproyectoService.changeEstado(estado, id);
     }
-    
+
 }

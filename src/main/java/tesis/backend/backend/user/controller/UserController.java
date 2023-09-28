@@ -15,14 +15,14 @@ import java.util.UUID;
 public class UserController {
     @Autowired
     private UserService userService;
-    
+
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
-    
-    @DeleteMapping("/delete/{id}")
+
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteById(@PathVariable("id") UUID id) {
         return userService.deletebyId(id);

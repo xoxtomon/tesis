@@ -35,40 +35,44 @@ public class ProyectoController {
     public ResponseEntity<String> addProyecto(@RequestBody() Proyecto proyecto) {
         return proyectoService.addProyecto(proyecto);
     }
-    
-    @PutMapping("/set/sustentacion/{id}/{date}")
+
+    @PutMapping("/sustentacion/{id}/{date}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> setFechaSustentacion(@PathVariable("id") UUID id, @PathVariable("date") Date date) {
         return proyectoService.setFechaSustentacion(id, date);
     }
-    
-    @PutMapping("/set/definitiva/{id}/{nota}")
+
+    @PutMapping("/definitiva/{id}/{nota}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> setFechaSustentacion(@PathVariable("id") UUID id, @PathVariable("nota") Float nota) {
         return proyectoService.setNotaDefinitiva(id, nota);
     }
-    
-    @PutMapping("/set/acta/{id}/{acta}")
+
+    @PutMapping("/acta/{id}/{acta}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> setFechaSustentacion(@PathVariable("id") UUID id, @PathVariable("acta") Integer acta) {
+    public ResponseEntity<String> setFechaSustentacion(@PathVariable("id") UUID id,
+            @PathVariable("acta") Integer acta) {
         return proyectoService.setNroActa(id, acta);
     }
-    
-    @PutMapping("/set/mencion/{id}/{mencion}")
+
+    @PutMapping("/mencion/{id}/{mencion}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> setMencionHonor(@PathVariable("id") UUID id, @PathVariable("mencion") Boolean mencion) {
+    public ResponseEntity<String> setMencionHonor(@PathVariable("id") UUID id,
+            @PathVariable("mencion") Boolean mencion) {
         return proyectoService.setMencionHonor(id, mencion);
     }
-    
-    @PutMapping("/set/postulacion/{id}/{fecha}")
+
+    @PutMapping("/postulacion/{id}/{fecha}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> setPostulacion(@PathVariable("id") UUID id, @PathVariable("fecha") Date fecha) {
         return proyectoService.setPostulacion(id, fecha);
     }
-    
-    @PutMapping("/set/docs/{id}/{docs}")
+
+    @PutMapping("/docs/{id}/{docs}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> setEntregaDocs(@PathVariable("id") UUID id, @PathVariable("docs") Boolean docs) {
         return proyectoService.setEntregaDocs(id, docs);
     }
+
+    // TODO put method for fechacreacion
 }
