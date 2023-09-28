@@ -32,8 +32,9 @@ public class AnteproyectoService {
     }
 
     public ResponseEntity<?> addAnteproyecto(Anteproyecto anteproyecto) {
-        Optional<Anteproyecto> OptionalAnteproyecto = anteproyectoRepository.findByNoRadicacion(anteproyecto.getNoRadicacion());
-        if(OptionalAnteproyecto.isPresent()) {
+        Optional<Anteproyecto> OptionalAnteproyecto = anteproyectoRepository
+                .findByNoRadicacion(anteproyecto.getNoRadicacion());
+        if (OptionalAnteproyecto.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No Radicacion ya usado.");
         }
         Anteproyecto savedAnteproyecto = anteproyectoRepository.save(anteproyecto);
@@ -53,25 +54,31 @@ public class AnteproyectoService {
         // Busco un anteproyecto por el uuid de usuario, si encuentro no puedo asociarlo
         // Pues el autor ya tiene un anteproyecto asociado.
         Optional<Anteproyecto> optionalAnteproyectoByAutor = anteproyectoRepository.findByAutorId(idAutor);
-        if(optionalAnteproyectoByAutor.isPresent()) {
+        if (optionalAnteproyectoByAutor.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El autor ya tiene un proyecto asociado.");
         }
-        
+
         // Traer el anteproyecto y ingresar a su nuevo autor.
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(idAnteproyecto);
         if (optionalAnteproyecto.isPresent()) {
-            
+
             Optional<User> optionalAutor = userRepository.findById(idAutor);
-            if(optionalAutor.isPresent()) {
+            if (optionalAutor.isPresent()) {
                 // Obtener El anteproyecto y los usuarios de ese anteproyecto
                 Anteproyecto anteproyecto = optionalAnteproyecto.get();
                 Set<User> autores = anteproyecto.getAutores();
                 // Obtener el usuario del uuid y agregarlo al Set
                 User autor = optionalAutor.get();
-                
-                // Si Tiene más de un Rol o el Rol que tiene no es de estudiante no debe poder agregarse como Autor
-                if(!hasOneRole(autor)){ return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El Usuario tiene más de un rol"); }
-                if(!hasRoleStudent(autor)) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El Usuario no tiene el rol de ESTUDIANTE."); }
+
+                // Si Tiene más de un Rol o el Rol que tiene no es de estudiante no debe poder
+                // agregarse como Autor
+                if (!hasOneRole(autor)) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El Usuario tiene más de un rol");
+                }
+                if (!hasRoleStudent(autor)) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body("El Usuario no tiene el rol de ESTUDIANTE.");
+                }
 
                 autores.add(autor);
                 anteproyecto.setAutores(autores);
@@ -80,25 +87,25 @@ public class AnteproyectoService {
 
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body("Se agrego al autor satisfactoriamente");
             }
-        } 
+        }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fallo al adicionar autor");
     }
-    
+
     public ResponseEntity<String> deleteAutor(UUID idAutor, UUID idanteproyecto) {
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(idanteproyecto);
         Optional<User> optionalUser = userRepository.findById(idAutor);
         // Validar que el Anteproyecto y el usuario existan
-        if(!optionalAnteproyecto.isPresent()) {
+        if (!optionalAnteproyecto.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Anteproyecto no encontrado");
         }
-        if(!optionalUser.isPresent()) {
+        if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuario no encontrado");
         }
         Anteproyecto anteproyecto = optionalAnteproyecto.get();
         User usuario = optionalUser.get();
         // Validar que el usuario es autor del anteproyecto
         Set<User> autores = anteproyecto.getAutores();
-        if(!autores.contains(usuario)) {
+        if (!autores.contains(usuario)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no es autor del anteproyecto");
         }
         // Borrar y guardar el nuevo conjunto de usuarios en el anteproyecto
@@ -113,82 +120,101 @@ public class AnteproyectoService {
     public ResponseEntity<String> addEvaluadorToAnteproyecto(UUID idEvaluador, UUID idAnteproyecto) {
         // VALIDACION DE EXISTENCIA DE ANTEPROYECTO Y USUARIO
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(idAnteproyecto);
-        if(!optionalAnteproyecto.isPresent()) {
+        if (!optionalAnteproyecto.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Anteproyecto no encontrado.");
         }
         Optional<User> optionalEvaluador = userRepository.findById(idEvaluador);
-        if(!optionalEvaluador.isPresent()) {
+        if (!optionalEvaluador.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Evaluador no encontrado.");
         }
 
         // VALIDACIONES DE ROLES DE USUARIO
         User evaluador = optionalEvaluador.get();
-        if(!hasRoleEvaluador(evaluador)) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no tiene el rol evaluador"); }
-        if(hasRoleStudent(evaluador)) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Los evaluadores no pueden tener el rol de ESTUDIANTE"); }
+        if (!hasRoleEvaluador(evaluador)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no tiene el rol evaluador");
+        }
+        if (hasRoleStudent(evaluador)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Los evaluadores no pueden tener el rol de ESTUDIANTE");
+        }
 
         Anteproyecto ante = optionalAnteproyecto.get();
         Set<User> evaluadores = ante.getEvaluadores();
         evaluadores.add(evaluador);
         ante.setEvaluadores(evaluadores);
         anteproyectoRepository.save(ante);
-        
+
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Evaluador agregado existosamente.");
     }
-    
+
     public ResponseEntity<String> deleteEvaluador(UUID idEvaluador, UUID idAnteproyecto) {
         // VALIDAR EXISTENCIA DEL ANTEPROYECTO Y EVALUADOR
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(idAnteproyecto);
-        if(!optionalAnteproyecto.isPresent()) { 
+        if (!optionalAnteproyecto.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se encontró el anteproyecto.");
         }
         Optional<User> optionalUser = userRepository.findById(idEvaluador);
-        if(!optionalUser.isPresent()) { 
+        if (!optionalUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se encontró el usuario.");
         }
         Anteproyecto ante = optionalAnteproyecto.get();
         User evaluador = optionalUser.get();
-        
+
         // VALIDAR QUE EL USUARIO SEA EVALUADOR DEL ANTEPROYECTO
         Set<User> evaluadores = ante.getEvaluadores();
-        if(!evaluadores.contains(evaluador)) {
+        if (!evaluadores.contains(evaluador)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no es evaluador del anteproyecto.");
         }
-        
+
         evaluadores.remove(evaluador);
         ante.setEvaluadores(evaluadores);
         anteproyectoRepository.save(ante);
-        
+
         return ResponseEntity.status(HttpStatus.OK).body("El evaluador fue eliminado del anteproyecto.");
     }
 
     public ResponseEntity<String> addFechaEntrega(UUID id, Date date) {
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(id);
-        if(!optionalAnteproyecto.isPresent()) {
+        if (!optionalAnteproyecto.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El anteproyecto no existe.");
         }
         Anteproyecto ante = optionalAnteproyecto.get();
         ante.setFechaEntregaAEvaluador(date);
         anteproyectoRepository.save(ante);
-        
+
         return ResponseEntity.status(HttpStatus.OK).body("Fecha de entrega agregada existosamente.");
     }
-    
+
     public ResponseEntity<String> addFechaDevolucion(UUID id, Date date) {
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(id);
-        if(!optionalAnteproyecto.isPresent()) {
+        if (!optionalAnteproyecto.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El anteproyecto no existe.");
         }
         Anteproyecto ante = optionalAnteproyecto.get();
         ante.setFechaEntregaDeEvaluador(date);
         anteproyectoRepository.save(ante);
-        
+
         return ResponseEntity.status(HttpStatus.OK).body("Fecha de devolución agregada existosamente.");
+    }
+
+    public ResponseEntity<String> addFechaCreacion(UUID id, Date date) {
+        Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(id);
+        if (!optionalAnteproyecto.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El anteproyecto no existe.");
+        }
+        Anteproyecto ante = optionalAnteproyecto.get();
+        ante.setFechaCreacion(date);
+        anteproyectoRepository.save(ante);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Fecha de creacion agregada existosamente.");
     }
 
     public ResponseEntity<String> changeEstado(Integer estado, UUID id) {
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(id);
-        if(!optionalAnteproyecto.isPresent()) { return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Anteproyecto no encontrado."); }
-        
+        if (!optionalAnteproyecto.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Anteproyecto no encontrado.");
+        }
+
         Anteproyecto ante = optionalAnteproyecto.get();
         try {
             ante.setEstado(estado);
@@ -204,9 +230,9 @@ public class AnteproyectoService {
     // CHECK
     private Boolean hasRoleStudent(User user) {
         Iterator<Role> itr = user.getRoles().iterator();
-        while(itr.hasNext()) {
+        while (itr.hasNext()) {
             String descripcion = itr.next().getDescripcion();
-            if(descripcion.equals("ESTUDIANTE")) {
+            if (descripcion.equals("ESTUDIANTE")) {
                 return true;
             }
         }
@@ -215,9 +241,9 @@ public class AnteproyectoService {
 
     private Boolean hasRoleEvaluador(User user) {
         Iterator<Role> itr = user.getRoles().iterator();
-        while(itr.hasNext()) {
+        while (itr.hasNext()) {
             String descripcion = itr.next().getDescripcion();
-            if(descripcion.equals("EVALUADOR")) {
+            if (descripcion.equals("EVALUADOR")) {
                 return true;
             }
         }
@@ -225,7 +251,7 @@ public class AnteproyectoService {
     }
 
     private Boolean hasOneRole(User user) {
-        if(user.getRoles().size() != 1) {
+        if (user.getRoles().size() != 1) {
             return false;
         }
         return true;

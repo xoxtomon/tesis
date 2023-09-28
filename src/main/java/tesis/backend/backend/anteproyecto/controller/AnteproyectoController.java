@@ -88,6 +88,11 @@ public class AnteproyectoController {
     }
 
     // TODO add put method for fechacreacion
+    @PutMapping("/fecha/creacion/{id}/{fecha}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> addFechaCreacion(@PathVariable("id") UUID id, @PathVariable("fecha") Date date) {
+        return anteproyectoService.addFechaCreacion(id, date);
+    }
 
     // ESTADO
     @PutMapping("/estado/{estado}/{idAnte}")
