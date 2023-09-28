@@ -31,6 +31,9 @@ public class Proyecto {
     @Column(name = "fechasustentacion")
     private Date fechaSustentacion;
     
+    @Column(name = "fechacreacion")
+    private Date fechaCreacion;
+    
     @Column(name = "notadefinitiva")
     private Float notaDefinitiva;
     

@@ -37,38 +37,34 @@ public class Anteproyecto {
 
     @Column(name = "fechaentregaaevaluador")
     private Date fechaEntregaAEvaluador;
-    
+
     @Column(name = "fechaentregadeevaluador")
     private Date fechaEntregaDeEvaluador;
+
+    @Column(name = "fechacreacion")
+    private Date fechaCreacion;
 
     @Column(name = "estado")
     private Integer estado;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "autores",
-            joinColumns = @JoinColumn(name = "anteproyectoid"),
-            inverseJoinColumns = @JoinColumn(name = "userid")
-    )
+    @JoinTable(name = "autores", joinColumns = @JoinColumn(name = "anteproyectoid"), inverseJoinColumns = @JoinColumn(name = "userid"))
     private Set<User> autores;
 
     @ManyToMany
-    @JoinTable(
-            name = "evaluadores",
-            joinColumns = @JoinColumn(name = "anteproyectoid"),
-            inverseJoinColumns = @JoinColumn(name = "userid")
-    )
+    @JoinTable(name = "evaluadores", joinColumns = @JoinColumn(name = "anteproyectoid"), inverseJoinColumns = @JoinColumn(name = "userid"))
     private Set<User> evaluadores;
 
     public Anteproyecto(Integer noRadicacion, String titulo, Date fechaEntregaAEvaluador, Date fechaEntregaDeEvaluador,
-            Integer estado) {
+            Date fechaCreacion, Integer estado) {
         this.noRadicacion = noRadicacion;
         this.titulo = titulo;
         this.fechaEntregaAEvaluador = fechaEntregaAEvaluador;
         this.fechaEntregaDeEvaluador = fechaEntregaDeEvaluador;
+        this.fechaCreacion = fechaCreacion;
         this.estado = estado;
     }
-    
+
     public Anteproyecto(Integer noRadicacion, String titulo, Integer estado) {
         this.noRadicacion = noRadicacion;
         this.titulo = titulo;
