@@ -24,7 +24,9 @@ public class WebSecurityConfig {
     private static final String[] WHITE_LIST_URLS = {
             "/api/v1/login",
             "/api/v1/registration",
-            "/api/v1/demo/white",
+            "/api/v1/file/upload", // delete after add admin or user auth
+            "/api/v1/file/download/**", // delete after add admin or user auth
+            "/api/v1/file", // delete after add admin or user auth
     };
     private static final String[] ADMIN_URLS = {
             "/api/v1/user/all",

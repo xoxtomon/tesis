@@ -26,6 +26,9 @@ public class File {
     @Column(name = "anteproyectoid")
     private UUID anteproyectoId;
     
+    @Column(name = "filename")
+    private String filename;    
+
     @Column(name = "description")
     private String description;
 
