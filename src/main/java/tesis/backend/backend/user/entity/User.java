@@ -40,9 +40,6 @@ public class User implements UserDetails {
     @Column(name = "lastname")
     private String lastname;
 
-    @Column(name = "estudiante", updatable = false)
-    private Boolean estudiante;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "userroles",
@@ -57,7 +54,6 @@ public class User implements UserDetails {
         this.password = password;
         this.name = name;
         this.lastname = lastname;
-        this.estudiante = estudiante;
         this.roles = roles;
     }
 
