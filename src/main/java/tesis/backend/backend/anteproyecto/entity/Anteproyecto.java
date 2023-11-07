@@ -17,6 +17,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tesis.backend.backend.evaluador.entity.Evaluador;
 import tesis.backend.backend.user.entity.User;
 
 @Entity
@@ -51,9 +52,14 @@ public class Anteproyecto {
     @JoinTable(name = "autores", joinColumns = @JoinColumn(name = "anteproyectoid"), inverseJoinColumns = @JoinColumn(name = "userid"))
     private Set<User> autores;
 
+    /*
     @ManyToMany
     @JoinTable(name = "evaluadores", joinColumns = @JoinColumn(name = "anteproyectoid"), inverseJoinColumns = @JoinColumn(name = "userid"))
     private Set<User> evaluadores;
+    */
+
+    @OneToMany(mappedBy = "anteproyectoId")
+    private Set<Evaluador> evaluadores;
 
     public Anteproyecto(Integer noRadicacion, String titulo, Date fechaEntregaAEvaluador, Date fechaEntregaDeEvaluador,
             Date fechaCreacion, Integer estado) {

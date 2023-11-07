@@ -117,6 +117,7 @@ public class AnteproyectoService {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Autor borrado existosamente");
     }
 
+    /*
     public ResponseEntity<String> addEvaluadorToAnteproyecto(UUID idEvaluador, UUID idAnteproyecto) {
         // VALIDACION DE EXISTENCIA DE ANTEPROYECTO Y USUARIO
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(idAnteproyecto);
@@ -172,6 +173,7 @@ public class AnteproyectoService {
 
         return ResponseEntity.status(HttpStatus.OK).body("El evaluador fue eliminado del anteproyecto.");
     }
+    */
 
     public ResponseEntity<String> addFechaEntrega(UUID id, Date date) {
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(id);

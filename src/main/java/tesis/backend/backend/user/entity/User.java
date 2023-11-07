@@ -3,6 +3,7 @@ package tesis.backend.backend.user.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tesis.backend.backend.evaluador.entity.Evaluador;
 import tesis.backend.backend.role.entity.Role;
 
 import java.util.Collection;
@@ -50,6 +51,9 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "roleid")
     )
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "userId")
+    private Set<Evaluador> evaluador;
 
     public User(int personalId, String username, String password, String name, String lastname, Boolean estudiante, Set<Role> roles) {
         this.personalId = personalId;

@@ -52,6 +52,7 @@ public class AnteproyectoController {
         return anteproyectoService.addAutorToAnteproyecto(idAutor, idAnteproyecto);
     }
 
+    /*
     @DeleteMapping("/autor/{idAutor}/{idanteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteAutor(@PathVariable("idAutor") UUID idAutor,
@@ -73,6 +74,7 @@ public class AnteproyectoController {
             @PathVariable("idanteproyecto") UUID idAnteproyecto) {
         return anteproyectoService.deleteEvaluador(idEvaluador, idAnteproyecto);
     }
+    */
 
     // FECHA
     @PutMapping("/fecha/entrega/{id}/{fecha}")
