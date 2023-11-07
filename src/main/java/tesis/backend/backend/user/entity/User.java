@@ -14,6 +14,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "user", schema = "public")
 @Data
@@ -28,7 +30,8 @@ public class User implements UserDetails {
     @Column(name = "personalid", updatable = false)
     private int personalId;
 
-    @Column(name = "username")
+    @Column(name = "email")
+    @JsonProperty("email") // to make requests with key "email" without changing backend logic
     private String username;
 
     @Column(name = "passwordhash")
