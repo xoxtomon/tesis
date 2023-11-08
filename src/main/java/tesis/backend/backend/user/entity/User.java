@@ -52,8 +52,8 @@ public class User implements UserDetails {
     )
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "userId")
-    private Set<Evaluador> evaluador;
+    //@OneToMany(mappedBy = "userId")
+    //private Set<Evaluador> evaluador;
 
     public User(int personalId, String username, String password, String name, String lastname, Boolean estudiante, Set<Role> roles) {
         this.personalId = personalId;

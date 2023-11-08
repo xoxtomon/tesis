@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import tesis.backend.backend.anteproyecto.entity.Anteproyecto;
 import tesis.backend.backend.anteproyecto.repository.AnteproyectoRepository;
+import tesis.backend.backend.evaluador.entity.Evaluador;
+import tesis.backend.backend.evaluador.repository.EvaluadorRepository;
 import tesis.backend.backend.role.entity.Role;
 import tesis.backend.backend.user.entity.User;
 import tesis.backend.backend.user.respository.UserRepository;
@@ -26,6 +28,9 @@ public class AnteproyectoService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EvaluadorRepository evaluadorRepository;
 
     public List<Anteproyecto> getAllAnteproyectos() {
         return anteproyectoRepository.findAll();
@@ -117,14 +122,14 @@ public class AnteproyectoService {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Autor borrado existosamente");
     }
 
-    /*
-    public ResponseEntity<String> addEvaluadorToAnteproyecto(UUID idEvaluador, UUID idAnteproyecto) {
+    public ResponseEntity<String> addEvaluadorToAnteproyecto(UUID idEvaluador, UUID idAnteproyecto, Boolean isDirector) {
         // VALIDACION DE EXISTENCIA DE ANTEPROYECTO Y USUARIO
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(idAnteproyecto);
         if (!optionalAnteproyecto.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Anteproyecto no encontrado.");
         }
         Optional<User> optionalEvaluador = userRepository.findById(idEvaluador);
+        Anteproyecto ante = optionalAnteproyecto.get();
         if (!optionalEvaluador.isPresent()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Evaluador no encontrado.");
         }
@@ -134,16 +139,25 @@ public class AnteproyectoService {
         if (!hasRoleEvaluador(evaluador)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no tiene el rol evaluador");
         }
+        if (isDirector && hasDirector(ante)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El Anteproyecto ya tiene Director asignado.");
+        }
         if (hasRoleStudent(evaluador)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Los evaluadores no pueden tener el rol de ESTUDIANTE");
         }
 
-        Anteproyecto ante = optionalAnteproyecto.get();
+        Evaluador evaluadorRelation = new Evaluador();
+        evaluadorRelation.setAnteproyectoId(idAnteproyecto);
+        evaluadorRelation.setIsDirector(isDirector);
+        evaluadorRelation.setUserId(evaluador.getUserId());
+        /*
         Set<User> evaluadores = ante.getEvaluadores();
         evaluadores.add(evaluador);
         ante.setEvaluadores(evaluadores);
-        anteproyectoRepository.save(ante);
+        */
+        evaluadorRepository.save(evaluadorRelation);
+        //anteproyectoRepository.save(ante);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Evaluador agregado existosamente.");
     }
@@ -159,21 +173,35 @@ public class AnteproyectoService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se encontró el usuario.");
         }
         Anteproyecto ante = optionalAnteproyecto.get();
-        User evaluador = optionalUser.get();
+        //User evaluador = optionalUser.get();
 
         // VALIDAR QUE EL USUARIO SEA EVALUADOR DEL ANTEPROYECTO
-        Set<User> evaluadores = ante.getEvaluadores();
-        if (!evaluadores.contains(evaluador)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no es evaluador del anteproyecto.");
+        Set<Evaluador> evaluadores = ante.getEvaluadores();
+        for (Evaluador evaluador : evaluadores) {
+            if (evaluador.getUserId() == idEvaluador) {
+                evaluadores.remove(evaluador);
+                evaluadorRepository.delete(evaluadorRepository.findById(evaluador.getId()).get());
+                //evaluadorRepository.deleteById(evaluador.getId());
+                break;
+            }
         }
-
-        evaluadores.remove(evaluador);
         ante.setEvaluadores(evaluadores);
         anteproyectoRepository.save(ante);
+        System.out.print("breakpoint");
+        System.out.print(ante.getEvaluadores());
+        /*
+         if (!evaluadores.contains(evaluador)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no es evaluador del anteproyecto.");
+        }
+         */
+        /*
+         evaluadores.remove(evaluador);
+        ante.setEvaluadores(evaluadores);
+        anteproyectoRepository.save(ante);
+         */
 
         return ResponseEntity.status(HttpStatus.OK).body("El evaluador fue eliminado del anteproyecto.");
     }
-    */
 
     public ResponseEntity<String> addFechaEntrega(UUID id, Date date) {
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(id);
@@ -257,5 +285,15 @@ public class AnteproyectoService {
             return false;
         }
         return true;
+    }
+
+    private boolean hasDirector(Anteproyecto ante) {
+        Set<Evaluador> evaluadores = ante.getEvaluadores();
+        for (Evaluador evaluador : evaluadores) {
+            if (evaluador.getIsDirector()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import tesis.backend.backend.anteproyecto.entity.Anteproyecto;
@@ -52,7 +53,6 @@ public class AnteproyectoController {
         return anteproyectoService.addAutorToAnteproyecto(idAutor, idAnteproyecto);
     }
 
-    /*
     @DeleteMapping("/autor/{idAutor}/{idanteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteAutor(@PathVariable("idAutor") UUID idAutor,
@@ -64,17 +64,16 @@ public class AnteproyectoController {
     @PostMapping("/evaluador/{idEvaluador}/{idanteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> addEvaluadorToAnteproyecto(@PathVariable("idEvaluador") UUID idEvaluador,
-            @PathVariable("idanteproyecto") UUID idAnteproyecto) {
-        return anteproyectoService.addEvaluadorToAnteproyecto(idEvaluador, idAnteproyecto);
+            @PathVariable("idanteproyecto") UUID idAnteproyecto, @RequestParam Boolean isDirector) {
+        return anteproyectoService.addEvaluadorToAnteproyecto(idEvaluador, idAnteproyecto, isDirector);
     }
 
-    @DeleteMapping("/evaluador/{idEvaluador}/{idanteproyecto}")
+    @DeleteMapping("/evaluador/{idEvaluador}/{idAnteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteEvaluador(@PathVariable("idEvaluador") UUID idEvaluador,
-            @PathVariable("idanteproyecto") UUID idAnteproyecto) {
+            @PathVariable("idAnteproyecto") UUID idAnteproyecto) {
         return anteproyectoService.deleteEvaluador(idEvaluador, idAnteproyecto);
     }
-    */
 
     // FECHA
     @PutMapping("/fecha/entrega/{id}/{fecha}")
