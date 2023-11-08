@@ -151,11 +151,6 @@ public class AnteproyectoService {
         evaluadorRelation.setAnteproyectoId(idAnteproyecto);
         evaluadorRelation.setIsDirector(isDirector);
         evaluadorRelation.setUserId(evaluador.getUserId());
-        /*
-        Set<User> evaluadores = ante.getEvaluadores();
-        evaluadores.add(evaluador);
-        ante.setEvaluadores(evaluadores);
-        */
         evaluadorRepository.save(evaluadorRelation);
         //anteproyectoRepository.save(ante);
 
@@ -174,33 +169,16 @@ public class AnteproyectoService {
         }
         Anteproyecto ante = optionalAnteproyecto.get();
         //User evaluador = optionalUser.get();
-
+        
         // VALIDAR QUE EL USUARIO SEA EVALUADOR DEL ANTEPROYECTO
         Set<Evaluador> evaluadores = ante.getEvaluadores();
         for (Evaluador evaluador : evaluadores) {
-            if (evaluador.getUserId() == idEvaluador) {
-                evaluadores.remove(evaluador);
-                evaluadorRepository.delete(evaluadorRepository.findById(evaluador.getId()).get());
-                //evaluadorRepository.deleteById(evaluador.getId());
-                break;
+            if (idEvaluador.equals(evaluador.getUserId())) {
+                evaluadorRepository.delete(evaluador);
+                return ResponseEntity.status(HttpStatus.OK).body("El evaluador fue eliminado del anteproyecto.");
             }
         }
-        ante.setEvaluadores(evaluadores);
-        anteproyectoRepository.save(ante);
-        System.out.print("breakpoint");
-        System.out.print(ante.getEvaluadores());
-        /*
-         if (!evaluadores.contains(evaluador)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no es evaluador del anteproyecto.");
-        }
-         */
-        /*
-         evaluadores.remove(evaluador);
-        ante.setEvaluadores(evaluadores);
-        anteproyectoRepository.save(ante);
-         */
-
-        return ResponseEntity.status(HttpStatus.OK).body("El evaluador fue eliminado del anteproyecto.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo realizar la accion.");
     }
 
     public ResponseEntity<String> addFechaEntrega(UUID id, Date date) {
