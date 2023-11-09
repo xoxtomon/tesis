@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import tesis.backend.backend.anteproyecto.entity.Anteproyecto;
+import tesis.backend.backend.anteproyecto.repository.AnteproyectoRepository;
 import tesis.backend.backend.file.entity.File;
 import tesis.backend.backend.file.repository.FileRepository;
 import tesis.backend.backend.util.FileUtils;
@@ -21,12 +23,20 @@ public class FileService {
     @Autowired
     private FileRepository fileRepository;
 
+    @Autowired
+    private AnteproyectoRepository anteproyectoRepository;
+
     public ResponseEntity<String> uploadFile(MultipartFile file, String description, UUID anteproyectoId) throws IOException {
         File fileEnt = new File();
         fileEnt.setAnteproyectoId(anteproyectoId);
         fileEnt.setFilename(file.getOriginalFilename());
         fileEnt.setDescription(description);
         fileEnt.setData(FileUtils.compressFile(file.getBytes()));
+
+        //Add numero de entrega to anteproyecto
+        Anteproyecto anteproyecto = anteproyectoRepository.findById(anteproyectoId).get();
+        anteproyecto.setNroEntrega(anteproyecto.getNroEntrega()+1);
+        anteproyectoRepository.save(anteproyecto);
 
         try {
             fileRepository.save(fileEnt);
