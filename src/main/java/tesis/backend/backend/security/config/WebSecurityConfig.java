@@ -1,6 +1,9 @@
 package tesis.backend.backend.security.config;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -17,67 +20,78 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthFilter;
-    private final AuthenticationProvider authenticationProvider;
+        private final JwtAuthenticationFilter jwtAuthFilter;
+        private final AuthenticationProvider authenticationProvider;
 
-    // Allowed endpoints from spring security to make requests
-    private static final String[] WHITE_LIST_URLS = {
-            "/api/v1/login",
-            "/api/v1/registration",
-            "/api/v1/file/upload", // delete after add admin or user auth
-            "/api/v1/file/download/**", // delete after add admin or user auth
-            "/api/v1/file", // delete after add admin or user auth
-    };
-    private static final String[] ADMIN_URLS = {
-            "/api/v1/user/all",
-            "/api/v1/user/delete/**",
-            "/api/v1/user/role/**",
-            "/api/v1/anteproyecto",
-            "/api/v1/anteproyecto/add/**",
-            "/api/v1/anteproyecto/delete/**",
-            "/api/v1/proyecto",
-            "/api/v1/proyecto/all",
+        // Allowed endpoints from spring security to make requests
+        private static final String[] WHITE_LIST_URLS = {
+                        "/api/v1/login",
+                        "/api/v1/registration",
+                        "/api/v1/file/upload", // delete after add admin or user auth
+                        "/api/v1/file/download/**", // delete after add admin or user auth
+                        "/api/v1/file", // delete after add admin or user auth
+        };
+        private static final String[] ADMIN_URLS = {
+                        "/api/v1/user/all",
+                        "/api/v1/user/delete/**",
+                        "/api/v1/user/role/**",
+                        "/api/v1/anteproyecto",
+                        "/api/v1/anteproyecto/add/**",
+                        "/api/v1/anteproyecto/delete/**",
+                        "/api/v1/proyecto",
+                        "/api/v1/proyecto/all",
 
-    };
+        };
 
-    private static final String[] EVALUADOR_URLS = {
-            "/api/v1/demo/evaluador",
-    };
+        private static final String[] EVALUADOR_URLS = {
+                        "/api/v1/demo/evaluador",
+        };
 
-    // Cannot duplicate in both ADMIN and EVALUADOR because then,
-    // only the first authority in the matchers is taken into account
-    private static final String[] ADMIN_EVALUADOR_URLS = {
-            "/api/v1/demo/adminevaluador",
-    };
+        // Cannot duplicate in both ADMIN and EVALUADOR because then,
+        // only the first authority in the matchers is taken into account
+        private static final String[] ADMIN_EVALUADOR_URLS = {
+                        "/api/v1/demo/adminevaluador",
+        };
 
-    private static final String[] ESTUDIANTE_URLS = {
-            "/api/v1/demo/estudiante",
-    };
-    // Configuration of spring security for building and requests actions
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .cors()
-                .and()
-                .csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .requestMatchers(WHITE_LIST_URLS)
-                .permitAll()
-                .requestMatchers(ADMIN_URLS).hasAuthority("ADMIN")
-                .requestMatchers(EVALUADOR_URLS).hasAuthority("EVALUADOR")
-                .requestMatchers(ESTUDIANTE_URLS).hasAuthority("ESTUDIANTE")
-                .requestMatchers(ADMIN_EVALUADOR_URLS).hasAnyAuthority("ADMIN","EVALUADOR" )
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        private static final String[] ESTUDIANTE_URLS = {
+                        "/api/v1/demo/estudiante",
+        };
 
-        return http.build();
-    }
+        // Configuration of spring security for building and requests actions
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http
+                                .cors()
+                                .and()
+                                .csrf()
+                                .disable()
+                                .authorizeHttpRequests()
+                                .requestMatchers(WHITE_LIST_URLS)
+                                .permitAll()
+                                .requestMatchers(ADMIN_URLS).hasAuthority("ADMIN")
+                                .requestMatchers(EVALUADOR_URLS).hasAuthority("EVALUADOR")
+                                .requestMatchers(ESTUDIANTE_URLS).hasAuthority("ESTUDIANTE")
+                                .requestMatchers(ADMIN_EVALUADOR_URLS).hasAnyAuthority("ADMIN", "EVALUADOR")
+                                .anyRequest()
+                                .authenticated()
+                                .and()
+                                .sessionManagement()
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                                .and()
+                                .authenticationProvider(authenticationProvider)
+                                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+                return http.build();
+        }
+
+        @Bean
+        CorsConfigurationSource corsConfigurationSource() {
+                CorsConfiguration configuration = new CorsConfiguration();
+                configuration.setAllowedOrigins(Arrays.asList("*"));
+                configuration.setAllowedMethods(Arrays.asList("*"));
+                configuration.setAllowedHeaders(Arrays.asList("*"));
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                source.registerCorsConfiguration("/**", configuration);
+                return source;
+        }
 }
-
