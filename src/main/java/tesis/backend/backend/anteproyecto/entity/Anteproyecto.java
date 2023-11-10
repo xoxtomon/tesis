@@ -60,25 +60,9 @@ public class Anteproyecto {
     @JoinTable(name = "autores", joinColumns = @JoinColumn(name = "anteproyectoid"), inverseJoinColumns = @JoinColumn(name = "userid"))
     private Set<User> autores;
 
-    /*
-    @ManyToMany
-    @JoinTable(name = "evaluadores", joinColumns = @JoinColumn(name = "anteproyectoid"), inverseJoinColumns = @JoinColumn(name = "userid"))
-    private Set<User> evaluadores;
-    */
 
     @OneToMany(mappedBy = "anteproyectoId")
     private Set<Evaluador> evaluadores;
-
-    /* public Anteproyecto(Integer noRadicacion, String titulo, Date fechaEntregaAEvaluador, Date fechaEntregaDeEvaluador,
-            Date fechaCreacion, Date fechaAprobacion, Integer estado) {
-        this.noRadicacion = noRadicacion;
-        this.titulo = titulo;
-        this.fechaEntregaAEvaluador = fechaEntregaAEvaluador;
-        this.fechaEntregaDeEvaluador = fechaEntregaDeEvaluador;
-        this.fechaCreacion = fechaCreacion;
-        this.fechaAprobacion = fechaAprobacion;
-        this.estado = estado;
-    } */
     
     public Anteproyecto(Integer nroRadicacion, String titulo) {
         this.noRadicacion = nroRadicacion;
@@ -92,11 +76,11 @@ public class Anteproyecto {
     }
 
 
-    public Anteproyecto(Integer noRadicacion, String titulo, Integer estado) {
+    /* public Anteproyecto(Integer noRadicacion, String titulo, Integer estado) {
         this.noRadicacion = noRadicacion;
         this.titulo = titulo;
         this.estado = estado;
         //this.fechaCreacion = date.today TODO
-    }
+    } */
 
 }
