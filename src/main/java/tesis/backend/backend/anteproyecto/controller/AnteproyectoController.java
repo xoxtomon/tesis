@@ -2,6 +2,7 @@ package tesis.backend.backend.anteproyecto.controller;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tesis.backend.backend.anteproyecto.entity.Anteproyecto;
 import tesis.backend.backend.anteproyecto.entity.AnteproyectoInput;
 import tesis.backend.backend.anteproyecto.service.AnteproyectoService;
+import tesis.backend.backend.user.entity.User;
 
 @RestController
 @RequestMapping("/api/v1/anteproyecto")
@@ -47,6 +49,12 @@ public class AnteproyectoController {
     }
 
     // AUTOR
+    @GetMapping("/autor/{idanteproyecto}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Set<User> findAutoresOfAnteproyecto(@PathVariable("idanteproyecto") UUID idAnteproyecto) {
+        return anteproyectoService.findAutoresOfAnteproyecto(idAnteproyecto);
+    }
+
     @PostMapping("/autor/{idAutor}/{idanteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> addAutorToAnteproyecto(@PathVariable("idAutor") UUID idAutor,
