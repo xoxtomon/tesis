@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -56,12 +57,12 @@ public class Anteproyecto {
     @Column(name = "nroentrega")
     private Integer nroEntrega = 0;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "autores", joinColumns = @JoinColumn(name = "anteproyectoid"), inverseJoinColumns = @JoinColumn(name = "userid"))
     private Set<User> autores;
 
 
-    @OneToMany(mappedBy = "anteproyectoId")
+    @OneToMany(mappedBy = "anteproyectoId", cascade = CascadeType.ALL)
     private Set<Evaluador> evaluadores;
     
     public Anteproyecto(Integer nroRadicacion, String titulo) {
