@@ -72,8 +72,8 @@ public class WebSecurityConfig {
                                 .authorizeHttpRequests()
                                 .requestMatchers(WHITE_LIST_URLS)
                                 .permitAll()
-                                .requestMatchers(ADMIN_URLS).hasAuthority("ADMIN")
-                                .requestMatchers(EVALUADOR_URLS).hasAuthority("EVALUADOR")
+                                .requestMatchers(ADMIN_URLS).hasAuthority("ADMIN")              //GLOBAL LEVEL ACCESS CONFIGURATION
+                                .requestMatchers(EVALUADOR_URLS).hasAuthority("EVALUADOR")      //@PreAuthorize() OFFERS MORE GRANULARITY AT METHOD LEVEL FOR FURTHER SPECIFICATION
                                 .requestMatchers(ESTUDIANTE_URLS).hasAuthority("ESTUDIANTE")
                                 .requestMatchers(ADMIN_EVALUADOR_URLS).hasAnyAuthority("ADMIN", "EVALUADOR")
                                 .anyRequest()
