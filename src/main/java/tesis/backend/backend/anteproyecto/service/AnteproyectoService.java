@@ -259,6 +259,12 @@ public class AnteproyectoService {
         }
     }
 
+    public Set<User> findAutoresOfAnteproyecto(UUID idAnteproyecto) {
+        Anteproyecto anteproyecto = anteproyectoRepository.findById(idAnteproyecto).get();
+        Set<User> autores = anteproyecto.getAutores();
+        return autores;
+    }
+
     // UTIL
     // CHECK
     private Boolean hasRoleStudent(User user) {

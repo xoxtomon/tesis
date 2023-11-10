@@ -57,12 +57,12 @@ public class Anteproyecto {
     @Column(name = "nroentrega")
     private Integer nroEntrega = 0;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "autores", joinColumns = @JoinColumn(name = "anteproyectoid"), inverseJoinColumns = @JoinColumn(name = "userid"))
     private Set<User> autores;
 
 
-    @OneToMany(mappedBy = "anteproyectoId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "anteproyectoId",  cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Evaluador> evaluadores;
     
     public Anteproyecto(Integer nroRadicacion, String titulo) {
@@ -75,13 +75,4 @@ public class Anteproyecto {
         this.autores = new HashSet<User>();
         this.evaluadores = new HashSet<Evaluador>();
     }
-
-
-    /* public Anteproyecto(Integer noRadicacion, String titulo, Integer estado) {
-        this.noRadicacion = noRadicacion;
-        this.titulo = titulo;
-        this.estado = estado;
-        //this.fechaCreacion = date.today TODO
-    } */
-
 }
