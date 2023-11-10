@@ -293,7 +293,7 @@ public class AnteproyectoService {
     private boolean hasDirector(Anteproyecto ante) {
         Set<Evaluador> evaluadores = ante.getEvaluadores();
         for (Evaluador evaluador : evaluadores) {
-            if (evaluador.getIsDirector()) {
+            if (evaluador.getDirector()) {
                 return true;
             }
         }

@@ -28,11 +28,11 @@ public class Evaluador {
     private UUID userId;
 
     @Column(name = "director")
-    private Boolean isDirector;
+    private Boolean director;
 
-    public Evaluador(UUID anteproyectoId, UUID userId, Boolean isDirector) {
+    public Evaluador(UUID anteproyectoId, UUID userId, Boolean director) {
         this.anteproyectoId = anteproyectoId;
         this.userId = userId;
-        this.isDirector = isDirector;
+        this.director = director;
     }
 }
