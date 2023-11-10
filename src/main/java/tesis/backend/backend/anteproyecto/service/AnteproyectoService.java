@@ -265,6 +265,12 @@ public class AnteproyectoService {
         return autores;
     }
 
+    public Set<Evaluador> findEvaluadoresOfAnteproyecto(UUID idAnteproyecto) {
+        Anteproyecto anteproyecto = anteproyectoRepository.findById(idAnteproyecto).get();
+        Set<Evaluador> evaluadores = anteproyecto.getEvaluadores();
+        return evaluadores;
+    }
+
     // UTIL
     // CHECK
     private Boolean hasRoleStudent(User user) {

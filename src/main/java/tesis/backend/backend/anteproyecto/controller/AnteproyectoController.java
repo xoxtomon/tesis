@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tesis.backend.backend.anteproyecto.entity.Anteproyecto;
 import tesis.backend.backend.anteproyecto.entity.AnteproyectoInput;
 import tesis.backend.backend.anteproyecto.service.AnteproyectoService;
+import tesis.backend.backend.evaluador.entity.Evaluador;
 import tesis.backend.backend.user.entity.User;
 
 @RestController
@@ -70,6 +71,12 @@ public class AnteproyectoController {
     }
 
     // EVALUADOR
+    @GetMapping("/evaluador/{idanteproyecto}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Set<Evaluador> findEvaluadorOfAnteproyecto(@PathVariable("idanteproyecto") UUID idAnteproyecto) {
+        return anteproyectoService.findEvaluadoresOfAnteproyecto(idAnteproyecto);
+    }
+
     @PostMapping("/evaluador/{idEvaluador}/{idanteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> addEvaluadorToAnteproyecto(@PathVariable("idEvaluador") UUID idEvaluador,
