@@ -78,7 +78,7 @@ public class AnteproyectoService {
     public ResponseEntity<String> deleteAnteproyecto(UUID id) {
         try {
             anteproyectoRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anteproyecto borrado exitosamente");
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Anteproyecto borrado exitosamente");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Anteproyecto no pudo ser borrado");
         }
