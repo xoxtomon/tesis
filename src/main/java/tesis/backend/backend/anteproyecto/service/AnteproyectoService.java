@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import tesis.backend.backend.anteproyecto.entity.Anteproyecto;
+import tesis.backend.backend.anteproyecto.entity.AnteproyectoInput;
+import tesis.backend.backend.anteproyecto.entity.AnteproyectoInput.EvaluadorInfo;
 import tesis.backend.backend.anteproyecto.repository.AnteproyectoRepository;
 import tesis.backend.backend.evaluador.entity.Evaluador;
 import tesis.backend.backend.evaluador.repository.EvaluadorRepository;
@@ -36,7 +38,7 @@ public class AnteproyectoService {
         return anteproyectoRepository.findAll();
     }
 
-    public ResponseEntity<?> addAnteproyecto(Anteproyecto anteproyecto) {
+    /* public ResponseEntity<?> addAnteproyecto(Anteproyecto anteproyecto) {
         Optional<Anteproyecto> OptionalAnteproyecto = anteproyectoRepository
                 .findByNoRadicacion(anteproyecto.getNoRadicacion());
         if (OptionalAnteproyecto.isPresent()) {
@@ -44,6 +46,62 @@ public class AnteproyectoService {
         }
         Anteproyecto savedAnteproyecto = anteproyectoRepository.save(anteproyecto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAnteproyecto);
+    } */
+    public ResponseEntity<?> addAnteproyecto(AnteproyectoInput anteproyectoInput) {
+
+        // CHECK if nroRadicacion is already used
+        Optional<Anteproyecto> OptionalAnteproyecto = anteproyectoRepository
+                .findByNoRadicacion(anteproyectoInput.getNroRadicacion());
+        if (OptionalAnteproyecto.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No Radicacion ya usado.");
+        }
+        
+        //Create Anteproyecto Object
+        Anteproyecto anteproyecto = new Anteproyecto(anteproyectoInput.getNroRadicacion(),anteproyectoInput.getTitulo());
+        // Save Full Anteproyecto to repository
+        anteproyectoRepository.save(anteproyecto);
+        
+        // Add every autor to the object
+        for (String emailAutor : anteproyectoInput.getAutores()) {
+            /* try {
+                System.out.println("breakpoint1");
+                System.out.println(emailAutor);
+                UUID userUuid = userRepository.findIdByEmail(emailAutor).get();
+                ResponseEntity<String> response = addAutorToAnteproyecto(userUuid, anteproyecto.getAnteproyectoId());
+                System.out.println("breakpoint2");
+                System.out.println(response);
+                System.out.println("\n");
+                System.out.println(userUuid);
+                System.out.println("breakpoint");
+            } catch (Exception e) {
+                // TODO: handle exception
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo crear el anteproyecto con el autor: " + emailAutor);
+            } */
+            
+                System.out.println("breakpoint1");
+                System.out.println(emailAutor);
+                UUID userUuid = userRepository.findIdByEmail(emailAutor).get();
+                ResponseEntity<String> response = addAutorToAnteproyecto(userUuid, anteproyecto.getAnteproyectoId());
+                System.out.println("breakpoint2");
+                System.out.println(response);
+                System.out.println("\n");
+                System.out.println(userUuid);
+                System.out.println("breakpoint");
+            
+        }
+        
+        // Add every evaluador to the object
+        for (EvaluadorInfo evaluador : anteproyectoInput.getEvaluadores()) {
+            String email = evaluador.getEmail();
+            try {
+                UUID userUuid = userRepository.findIdByEmail(email).get();
+                addEvaluadorToAnteproyecto(userUuid, anteproyecto.getAnteproyectoId(), evaluador.getIsdirector());
+            } catch (Exception e) {
+                // TODO: handle exception
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo crear el anteproyecto con el evaluador"+ email);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(anteproyecto);
     }
 
     public ResponseEntity<String> deleteAnteproyecto(UUID id) {

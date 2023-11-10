@@ -79,7 +79,7 @@ public class Anteproyecto {
         this.estado = estado;
     } */
     
-    public Anteproyecto(Integer nroRadicacion, String titulo, List<String> autores, List<Evaluador> evaluadores) {
+    public Anteproyecto(Integer nroRadicacion, String titulo) {
         this.noRadicacion = nroRadicacion;
         this.titulo = titulo;
         this.estado = 3;

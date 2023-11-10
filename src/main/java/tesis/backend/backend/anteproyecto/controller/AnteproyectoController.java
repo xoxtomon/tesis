@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import tesis.backend.backend.anteproyecto.entity.Anteproyecto;
+import tesis.backend.backend.anteproyecto.entity.AnteproyectoInput;
 import tesis.backend.backend.anteproyecto.service.AnteproyectoService;
+import tesis.backend.backend.user.respository.UserRepository;
 
 @RestController
 @RequestMapping("/api/v1/anteproyecto")
@@ -26,6 +28,8 @@ public class AnteproyectoController {
 
     @Autowired
     private AnteproyectoService anteproyectoService;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping()
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -33,10 +37,22 @@ public class AnteproyectoController {
         return anteproyectoService.getAllAnteproyectos();
     }
 
-    @PostMapping()
+    /* @PostMapping()
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> addAnteproyecto(@RequestBody() Anteproyecto anteproyecto) {
         return anteproyectoService.addAnteproyecto(anteproyecto);
+    } */
+    @PostMapping()
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> addAnteproyecto(@RequestBody() AnteproyectoInput anteproyectoInput) {
+        System.out.println(anteproyectoInput.getNroRadicacion());
+        System.out.println(anteproyectoInput.getTitulo());
+        System.out.println(anteproyectoInput.getAutores());
+        System.out.println(anteproyectoInput.getEvaluadores());
+        System.out.println(userRepository.findIdByEmail("autor1").get());
+        System.out.println(userRepository.findById(userRepository.findIdByEmail("autor1").get()).get());
+        return ResponseEntity.ok().body("test");
+        //return anteproyectoService.addAnteproyecto(anteproyectoInput);
     }
 
     @DeleteMapping("/{id}")
