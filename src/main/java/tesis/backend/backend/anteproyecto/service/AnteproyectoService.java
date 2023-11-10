@@ -38,15 +38,6 @@ public class AnteproyectoService {
         return anteproyectoRepository.findAll();
     }
 
-    /* public ResponseEntity<?> addAnteproyecto(Anteproyecto anteproyecto) {
-        Optional<Anteproyecto> OptionalAnteproyecto = anteproyectoRepository
-                .findByNoRadicacion(anteproyecto.getNoRadicacion());
-        if (OptionalAnteproyecto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No Radicacion ya usado.");
-        }
-        Anteproyecto savedAnteproyecto = anteproyectoRepository.save(anteproyecto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedAnteproyecto);
-    } */
     public ResponseEntity<?> addAnteproyecto(AnteproyectoInput anteproyectoInput) {
 
         // CHECK if nroRadicacion is already used
@@ -58,36 +49,16 @@ public class AnteproyectoService {
         
         //Create Anteproyecto Object
         Anteproyecto anteproyecto = new Anteproyecto(anteproyectoInput.getNroRadicacion(),anteproyectoInput.getTitulo());
-        // Save Full Anteproyecto to repository
         anteproyectoRepository.save(anteproyecto);
         
         // Add every autor to the object
         for (String emailAutor : anteproyectoInput.getAutores()) {
-            /* try {
-                System.out.println("breakpoint1");
-                System.out.println(emailAutor);
+            try {
                 UUID userUuid = userRepository.findIdByEmail(emailAutor).get();
-                ResponseEntity<String> response = addAutorToAnteproyecto(userUuid, anteproyecto.getAnteproyectoId());
-                System.out.println("breakpoint2");
-                System.out.println(response);
-                System.out.println("\n");
-                System.out.println(userUuid);
-                System.out.println("breakpoint");
+                addAutorToAnteproyecto(userUuid, anteproyecto.getAnteproyectoId());
             } catch (Exception e) {
-                // TODO: handle exception
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo crear el anteproyecto con el autor: " + emailAutor);
-            } */
-            
-                System.out.println("breakpoint1");
-                System.out.println(emailAutor);
-                UUID userUuid = userRepository.findIdByEmail(emailAutor).get();
-                ResponseEntity<String> response = addAutorToAnteproyecto(userUuid, anteproyecto.getAnteproyectoId());
-                System.out.println("breakpoint2");
-                System.out.println(response);
-                System.out.println("\n");
-                System.out.println(userUuid);
-                System.out.println("breakpoint");
-            
+            }
         }
         
         // Add every evaluador to the object
@@ -95,15 +66,15 @@ public class AnteproyectoService {
             String email = evaluador.getEmail();
             try {
                 UUID userUuid = userRepository.findIdByEmail(email).get();
-                addEvaluadorToAnteproyecto(userUuid, anteproyecto.getAnteproyectoId(), evaluador.getIsdirector());
+                addEvaluadorToAnteproyecto(userUuid, anteproyecto.getAnteproyectoId(), evaluador.isDirector());
             } catch (Exception e) {
-                // TODO: handle exception
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo crear el anteproyecto con el evaluador"+ email);
             }
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(anteproyecto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Anteproyecto creado satisfactoriamente.");
     }
 
+    // Delete all autores, delete all evaluadores, then delete anteproyecto
     public ResponseEntity<String> deleteAnteproyecto(UUID id) {
         try {
             anteproyectoRepository.deleteById(id);
@@ -205,12 +176,8 @@ public class AnteproyectoService {
                     .body("Los evaluadores no pueden tener el rol de ESTUDIANTE");
         }
 
-        Evaluador evaluadorRelation = new Evaluador();
-        evaluadorRelation.setAnteproyectoId(idAnteproyecto);
-        evaluadorRelation.setIsDirector(isDirector);
-        evaluadorRelation.setUserId(evaluador.getUserId());
+        Evaluador evaluadorRelation = new Evaluador(idAnteproyecto, idEvaluador, isDirector);
         evaluadorRepository.save(evaluadorRelation);
-        //anteproyectoRepository.save(ante);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Evaluador agregado existosamente.");
     }

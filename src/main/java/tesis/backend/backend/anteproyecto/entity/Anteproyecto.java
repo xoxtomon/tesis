@@ -2,6 +2,7 @@ package tesis.backend.backend.anteproyecto.entity;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -86,6 +87,8 @@ public class Anteproyecto {
 
         LocalDate today = LocalDate.now();
         this.fechaCreacion = Date.valueOf(today);
+        this.autores = new HashSet<User>();
+        this.evaluadores = new HashSet<Evaluador>();
     }
 
 

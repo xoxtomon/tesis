@@ -29,4 +29,10 @@ public class Evaluador {
 
     @Column(name = "director")
     private Boolean isDirector;
+
+    public Evaluador(UUID anteproyectoId, UUID userId, Boolean isDirector) {
+        this.anteproyectoId = anteproyectoId;
+        this.userId = userId;
+        this.isDirector = isDirector;
+    }
 }
