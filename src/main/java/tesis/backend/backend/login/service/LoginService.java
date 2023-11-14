@@ -3,6 +3,7 @@ package tesis.backend.backend.login.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +23,7 @@ public class LoginService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    public ResponseEntity<RegistrationResponse> login(Login login) {
+    public ResponseEntity<?> login(Login login) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         login.getUsername(),
@@ -30,6 +31,9 @@ public class LoginService {
                 )
         );
         User user = userRepository.findByUsername(login.getUsername()).orElseThrow(); //() -> new UsernameNotFoundException("Usuario no encontrado")
+        if (user.getRoles().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The user has no roles");
+        }
         String jwtToken = jwtService.generateToken(user);
         RegistrationResponse response = new RegistrationResponse(jwtToken);
 
