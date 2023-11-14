@@ -26,17 +26,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-        @NonNull HttpServletRequest request, 
-        @NonNull HttpServletResponse response, 
-        @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain) throws ServletException, IOException {
 
-        // Extract JWT from header for each request
+        // Extract JWT from header for each request and perform validation each time
+        // before reaching the controllers
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String username;
 
-        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -45,20 +45,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         username = jwtService.extractUsername(jwt);
         // the user can be extracted from the token
         // there is no user already authenticated
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails user = this.userDetailsService.loadUserByUsername(username);
-            // Check if username  and Token are valid
-            if(jwtService.isTokenvalid(jwt, user)) {
+            // Check if username and Token are valid
+            if (jwtService.isTokenvalid(jwt, user)) {
                 // Create a Token username password
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         user,
                         null,
-                        user.getAuthorities()
-                );
+                        user.getAuthorities());
                 // Extend the Token with the request's info
                 authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
+                        new WebAuthenticationDetailsSource().buildDetails(request));
                 // Update auth context
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
