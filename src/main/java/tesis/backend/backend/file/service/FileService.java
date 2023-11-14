@@ -24,9 +24,6 @@ public class FileService {
     @Autowired
     private FileRepository fileRepository;
 
-    @Autowired
-    private AnteproyectoRepository anteproyectoRepository;
-
     public ResponseEntity<String> uploadFile(MultipartFile file, String description, UUID idAsociado, Boolean isAnteproyecto, Integer nroEntrega) throws IOException {
         File fileEnt = new File();
         fileEnt.setIdAsociado(idAsociado);
@@ -34,16 +31,6 @@ public class FileService {
         fileEnt.setFilename(file.getOriginalFilename());
         fileEnt.setDescription(description);
 
-        // TODO chack that current numero entrega is (nroEntrega - 1) verify that no more that 3 entregas have been made for anteproyecto
-        /* if nroEntrega > 3 break no more than 3 entregas can be made 
-        if( isAnteproyecto) {
-            Integer getnroEntrega = service.getCurrentNroEntregaAnteproyecto()
-            if getnroEntrega + 1 != nroEntrega break
-        } else {
-            Integer getnroEntrega = service.getCurrentNroEntregaProyecto()
-            if getnroEntrega + 1 != nroEntrega break
-        }
-        ok set fileEnt.setNroEntrega(nroEntrega); */
         if(nroEntrega > 3) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Solo se pueden realizar máximo 3 entregas.");
         }
@@ -52,13 +39,8 @@ public class FileService {
         if((currentEntrega + 1) != nroEntrega) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El numero de entrega no corresponde con la entra que se debe hacer. El número de entrega actual es: " + currentEntrega);
         }
-
+        fileEnt.setNroEntrega(nroEntrega);
         fileEnt.setData(FileUtils.compressFile(file.getBytes()));
-
-        //Add numero de entrega to anteproyecto
-        /* Anteproyecto anteproyecto = anteproyectoRepository.findById(idAsociado).get();
-        anteproyecto.setNroEntrega(anteproyecto.getNroEntrega()+1);
-        anteproyectoRepository.save(anteproyecto); */
 
         try {
             fileRepository.save(fileEnt);
