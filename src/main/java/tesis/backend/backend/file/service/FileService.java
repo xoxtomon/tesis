@@ -3,6 +3,7 @@ package tesis.backend.backend.file.service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import tesis.backend.backend.anteproyecto.entity.Anteproyecto;
 import tesis.backend.backend.anteproyecto.repository.AnteproyectoRepository;
+import tesis.backend.backend.anteproyecto.service.AnteproyectoService;
 import tesis.backend.backend.file.entity.File;
 import tesis.backend.backend.file.repository.FileRepository;
+import tesis.backend.backend.user.entity.User;
 import tesis.backend.backend.util.FileUtils;
 
 @Service
@@ -23,6 +26,8 @@ public class FileService {
     
     @Autowired
     private FileRepository fileRepository;
+    @Autowired
+    private AnteproyectoService anteproyectoService;
 
     public ResponseEntity<String> uploadFile(MultipartFile file, String description, UUID idAsociado, Boolean isAnteproyecto, Integer nroEntrega) throws IOException {
         File fileEnt = new File();
@@ -63,5 +68,15 @@ public class FileService {
     public byte[] downloadFile(File file) {
         byte[] document = FileUtils.decompressFile(file.getData());
         return document;
+    }
+
+    public Boolean isAssociated(UUID idUser, UUID idAnteproyecto) {
+        Set<User> autores = anteproyectoService.findAutoresOfAnteproyecto(idAnteproyecto);
+        for (User user : autores) {
+            if (user.getUserId().equals(idUser)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
