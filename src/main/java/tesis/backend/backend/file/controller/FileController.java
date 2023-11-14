@@ -27,8 +27,8 @@ public class FileController {
     private FileService fileService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("anteproyectoId") UUID anteproyectoId, @RequestParam("description") String description) throws IOException {
-        return fileService.uploadFile(file, description, anteproyectoId);
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("idAsociado") UUID idAsociado, @RequestParam("description") String description, @RequestParam("isAnteproyecto") Boolean isAnteproyecto, @RequestParam("nroEntrega") Integer nroEntrega) throws IOException {
+        return fileService.uploadFile(file, description, idAsociado, isAnteproyecto, nroEntrega);
     }
 
     @GetMapping("download/{id}")

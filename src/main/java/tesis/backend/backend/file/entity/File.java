@@ -23,23 +23,31 @@ public class File {
     @Column(name = "fileid", updatable = false)
     private UUID id;
 
-    @Column(name = "anteproyectoid")
-    private UUID anteproyectoId;
-    
+    @Column(name = "idasociado")
+    private UUID idAsociado;
+
+    @Column(name = "isanteproyecto")
+    private Boolean isAnteproyecto;
+
     @Column(name = "filename")
     private String filename;    
 
     @Column(name = "description")
     private String description;
 
+    @Column(name = "nroentrega")
+    private Integer nroEntrega;
+
     @Lob
     @Column(name = "data")
     private byte[] data;
     
-    public File(UUID anteproyectoId, String description, byte[] data) {
-        this.anteproyectoId = anteproyectoId;
+    public File(UUID idAsociado, Boolean isAnteproyecto, String description, byte[] data) {
+        this.idAsociado = idAsociado;
+        this.isAnteproyecto = isAnteproyecto;
         this.description = description;
         this.data = data;
+        this.nroEntrega = 0;
     }
 
 }
