@@ -66,6 +66,7 @@ public class FileController {
     }
 
     @GetMapping()
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<File> getFiles() {
         return fileService.getAllFiles();
     }

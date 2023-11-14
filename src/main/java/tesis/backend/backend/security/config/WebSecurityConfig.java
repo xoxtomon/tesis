@@ -31,6 +31,7 @@ public class WebSecurityConfig {
         private static final String[] WHITE_LIST_URLS = {
                         "/api/v1/login",
                         "/api/v1/registration",
+                        "/api/v1/file/download/**",
         };
         private static final String[] ADMIN_URLS = {
                         "/api/v1/user/all",
@@ -41,7 +42,7 @@ public class WebSecurityConfig {
                         "/api/v1/anteproyecto/delete/**",
                         "/api/v1/proyecto",
                         "/api/v1/proyecto/all",
-
+                        "/api/v1/file",
         };
 
         private static final String[] EVALUADOR_URLS = {
@@ -49,9 +50,7 @@ public class WebSecurityConfig {
         };
 
         private static final String[] ESTUDIANTE_URLS = {
-                        "/api/v1/file/upload", // delete after add admin or user auth
-                        "/api/v1/file/download/**", // delete after add admin or user auth
-                        "/api/v1/file", // delete after add admin or user auth
+                        "/api/v1/file/upload", 
         };
 
         // Configuration of spring security for building and requests actions
