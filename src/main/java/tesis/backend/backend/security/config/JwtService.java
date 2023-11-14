@@ -53,7 +53,13 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public List<String> extractRoles(String token) { return extractClaim(token, claims -> claims.get("roles", List.class)); }
+    public String extractUserId(String token) {
+        return extractClaim(token, claims -> claims.get("id", String.class));
+    }
+
+    public List<String> extractRoles(String token) { 
+        return extractClaim(token, claims -> claims.get("roles", List.class)); 
+    }
 
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
