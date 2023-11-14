@@ -32,7 +32,7 @@ public class LoginService {
         );
         User user = userRepository.findByUsername(login.getUsername()).orElseThrow(); //() -> new UsernameNotFoundException("Usuario no encontrado")
         if (user.getRoles().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The user has no roles");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The user has no roles, contact your ADMIN.");
         }
         String jwtToken = jwtService.generateToken(user);
         RegistrationResponse response = new RegistrationResponse(jwtToken);
