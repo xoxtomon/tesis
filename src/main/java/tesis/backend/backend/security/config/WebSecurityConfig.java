@@ -31,9 +31,6 @@ public class WebSecurityConfig {
         private static final String[] WHITE_LIST_URLS = {
                         "/api/v1/login",
                         "/api/v1/registration",
-                        "/api/v1/file/upload", // delete after add admin or user auth
-                        "/api/v1/file/download/**", // delete after add admin or user auth
-                        "/api/v1/file", // delete after add admin or user auth
         };
         private static final String[] ADMIN_URLS = {
                         "/api/v1/user/all",
@@ -51,14 +48,10 @@ public class WebSecurityConfig {
                         "/api/v1/demo/evaluador",
         };
 
-        // Cannot duplicate in both ADMIN and EVALUADOR because then,
-        // only the first authority in the matchers is taken into account
-        private static final String[] ADMIN_EVALUADOR_URLS = {
-                        "/api/v1/demo/adminevaluador",
-        };
-
         private static final String[] ESTUDIANTE_URLS = {
-                        "/api/v1/demo/estudiante",
+                        "/api/v1/file/upload", // delete after add admin or user auth
+                        "/api/v1/file/download/**", // delete after add admin or user auth
+                        "/api/v1/file", // delete after add admin or user auth
         };
 
         // Configuration of spring security for building and requests actions
@@ -75,7 +68,6 @@ public class WebSecurityConfig {
                                 .requestMatchers(ADMIN_URLS).hasAuthority("ADMIN")              //GLOBAL LEVEL ACCESS CONFIGURATION
                                 .requestMatchers(EVALUADOR_URLS).hasAuthority("EVALUADOR")      //@PreAuthorize() OFFERS MORE GRANULARITY AT METHOD LEVEL FOR FURTHER SPECIFICATION
                                 .requestMatchers(ESTUDIANTE_URLS).hasAuthority("ESTUDIANTE")
-                                .requestMatchers(ADMIN_EVALUADOR_URLS).hasAnyAuthority("ADMIN", "EVALUADOR")
                                 .anyRequest()
                                 .authenticated()
                                 .and()
