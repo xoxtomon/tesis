@@ -54,8 +54,8 @@ public class Anteproyecto {
     @Column(name = "estado")
     private Integer estado;
 
-    @Column(name = "nroentrega")
-    private Integer nroEntrega = 0;
+    //@Column(name = "nroentrega")
+    //private Integer nroEntrega = 0;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "autores", joinColumns = @JoinColumn(name = "anteproyectoid"), inverseJoinColumns = @JoinColumn(name = "userid"))
