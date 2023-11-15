@@ -50,37 +50,37 @@ public class AnteproyectoController {
     }
 
     // AUTOR
-    @GetMapping("/autor/{idanteproyecto}")
+    @GetMapping("/autor/{idAnteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Set<User> findAutoresOfAnteproyecto(@PathVariable("idanteproyecto") UUID idAnteproyecto) {
+    public Set<User> findAutoresOfAnteproyecto(@PathVariable("idAnteproyecto") UUID idAnteproyecto) {
         return anteproyectoService.findAutoresOfAnteproyecto(idAnteproyecto);
     }
 
-    @PostMapping("/autor/{idAutor}/{idanteproyecto}")
+    @PostMapping("/autor/{idAutor}/{idAnteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> addAutorToAnteproyecto(@PathVariable("idAutor") UUID idAutor,
-            @PathVariable("idanteproyecto") UUID idAnteproyecto) {
+            @PathVariable("idAnteproyecto") UUID idAnteproyecto) {
         return anteproyectoService.addAutorToAnteproyecto(idAutor, idAnteproyecto);
     }
 
-    @DeleteMapping("/autor/{idAutor}/{idanteproyecto}")
+    @DeleteMapping("/autor/{idAutor}/{idAnteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteAutor(@PathVariable("idAutor") UUID idAutor,
-            @PathVariable("idanteproyecto") UUID idAnteproyecto) {
+            @PathVariable("idAnteproyecto") UUID idAnteproyecto) {
         return anteproyectoService.deleteAutor(idAutor, idAnteproyecto);
     }
 
     // EVALUADOR
-    @GetMapping("/evaluador/{idanteproyecto}")
+    @GetMapping("/evaluador/{idAnteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Set<Evaluador> findEvaluadorOfAnteproyecto(@PathVariable("idanteproyecto") UUID idAnteproyecto) {
+    public Set<Evaluador> findEvaluadorOfAnteproyecto(@PathVariable("idAnteproyecto") UUID idAnteproyecto) {
         return anteproyectoService.findEvaluadoresOfAnteproyecto(idAnteproyecto);
     }
 
-    @PostMapping("/evaluador/{idEvaluador}/{idanteproyecto}")
+    @PostMapping("/evaluador/{idEvaluador}/{idAnteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> addEvaluadorToAnteproyecto(@PathVariable("idEvaluador") UUID idEvaluador,
-            @PathVariable("idanteproyecto") UUID idAnteproyecto, @RequestParam Boolean isDirector) {
+            @PathVariable("idAnteproyecto") UUID idAnteproyecto, @RequestParam Boolean isDirector) {
         return anteproyectoService.addEvaluadorToAnteproyecto(idEvaluador, idAnteproyecto, isDirector);
     }
 
@@ -112,10 +112,10 @@ public class AnteproyectoController {
     }
 
     // ESTADO
-    @PutMapping("/estado/{estado}/{idAnte}")
+    @PutMapping("/estado/{estado}/{idAnteproyecto}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> changeEstado(@PathVariable("estado") Integer estado,
-            @PathVariable("idAnte") UUID id) {
+            @PathVariable("idAnteproyecto") UUID id) {
         return anteproyectoService.changeEstado(estado, id);
     }
 

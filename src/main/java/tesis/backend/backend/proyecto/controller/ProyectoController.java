@@ -44,13 +44,13 @@ public class ProyectoController {
 
     @PutMapping("/definitiva/{id}/{nota}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> setFechaSustentacion(@PathVariable("id") UUID id, @PathVariable("nota") Float nota) {
+    public ResponseEntity<String> setNotaDefinitiva(@PathVariable("id") UUID id, @PathVariable("nota") Float nota) {
         return proyectoService.setNotaDefinitiva(id, nota);
     }
 
     @PutMapping("/acta/{id}/{acta}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> setFechaSustentacion(@PathVariable("id") UUID id,
+    public ResponseEntity<String> setNumeroActa(@PathVariable("id") UUID id,
             @PathVariable("acta") Integer acta) {
         return proyectoService.setNroActa(id, acta);
     }

@@ -28,7 +28,7 @@ public class UserController {
         return userService.deletebyId(id);
     }
 
-    @GetMapping("/role/{id}/{role}")
+    @PutMapping("/role/{id}/{role}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String addRole(@PathVariable("id") UUID id, @PathVariable("role") Integer role) {
         userService.addRole(id, role);

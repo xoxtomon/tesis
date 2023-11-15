@@ -78,9 +78,9 @@ public class AnteproyectoService {
     public ResponseEntity<String> deleteAnteproyecto(UUID id) {
         try {
             anteproyectoRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Anteproyecto borrado exitosamente");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Anteproyecto borrado exitosamente");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Anteproyecto no pudo ser borrado");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Anteproyecto no pudo ser borrado");
         }
     }
 
@@ -130,10 +130,10 @@ public class AnteproyectoService {
         Optional<User> optionalUser = userRepository.findById(idAutor);
         // Validar que el Anteproyecto y el usuario existan
         if (!optionalAnteproyecto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Anteproyecto no encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anteproyecto no encontrado");
         }
         if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuario no encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
         }
         Anteproyecto anteproyecto = optionalAnteproyecto.get();
         User usuario = optionalUser.get();
@@ -155,12 +155,12 @@ public class AnteproyectoService {
         // VALIDACION DE EXISTENCIA DE ANTEPROYECTO Y USUARIO
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(idAnteproyecto);
         if (!optionalAnteproyecto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Anteproyecto no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anteproyecto no encontrado.");
         }
         Optional<User> optionalEvaluador = userRepository.findById(idEvaluador);
         Anteproyecto ante = optionalAnteproyecto.get();
         if (!optionalEvaluador.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Evaluador no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Evaluador no encontrado.");
         }
 
         // VALIDACIONES DE ROLES DE USUARIO
@@ -186,11 +186,11 @@ public class AnteproyectoService {
         // VALIDAR EXISTENCIA DEL ANTEPROYECTO Y EVALUADOR
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(idAnteproyecto);
         if (!optionalAnteproyecto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se encontró el anteproyecto.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el anteproyecto.");
         }
         Optional<User> optionalUser = userRepository.findById(idEvaluador);
         if (!optionalUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se encontró el usuario.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el usuario.");
         }
         Anteproyecto ante = optionalAnteproyecto.get();
         //User evaluador = optionalUser.get();
@@ -200,7 +200,7 @@ public class AnteproyectoService {
         for (Evaluador evaluador : evaluadores) {
             if (idEvaluador.equals(evaluador.getUserId())) {
                 evaluadorRepository.delete(evaluador);
-                return ResponseEntity.status(HttpStatus.OK).body("El evaluador fue eliminado del anteproyecto.");
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("El evaluador fue eliminado del anteproyecto.");
             }
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo realizar la accion.");
@@ -209,7 +209,7 @@ public class AnteproyectoService {
     public ResponseEntity<String> addFechaEntrega(UUID id, Date date) {
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(id);
         if (!optionalAnteproyecto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El anteproyecto no existe.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El anteproyecto no existe.");
         }
         Anteproyecto ante = optionalAnteproyecto.get();
         ante.setFechaEntregaAEvaluador(date);
@@ -221,7 +221,7 @@ public class AnteproyectoService {
     public ResponseEntity<String> addFechaDevolucion(UUID id, Date date) {
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(id);
         if (!optionalAnteproyecto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El anteproyecto no existe.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El anteproyecto no existe.");
         }
         Anteproyecto ante = optionalAnteproyecto.get();
         ante.setFechaEntregaDeEvaluador(date);
@@ -245,7 +245,7 @@ public class AnteproyectoService {
     public ResponseEntity<String> changeEstado(Integer estado, UUID id) {
         Optional<Anteproyecto> optionalAnteproyecto = anteproyectoRepository.findById(id);
         if (!optionalAnteproyecto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Anteproyecto no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Anteproyecto no encontrado.");
         }
 
         Anteproyecto ante = optionalAnteproyecto.get();

@@ -26,7 +26,7 @@ public class ProyectoService {
         // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
         Optional<Anteproyecto> optionalAnte = anteproyectoRepository.findById(proyecto.getAnteproyectoId());
         if (!optionalAnte.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No existe el Id del anteproyecto");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe el Id del anteproyecto");
         }
 
         // GUARDAR EL PROYECTO
@@ -46,7 +46,7 @@ public class ProyectoService {
         // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
         Optional<Proyecto> optionalProyecto = proyectoRepository.findById(id);
         if (!optionalProyecto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo encontrar el proyecto.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo encontrar el proyecto.");
         }
 
         try {
@@ -63,7 +63,7 @@ public class ProyectoService {
         // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
         Optional<Proyecto> optionalProyecto = proyectoRepository.findById(id);
         if (!optionalProyecto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo encontrar el proyecto.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo encontrar el proyecto.");
         }
 
         if (nota > 5 || nota < 0) {
@@ -86,7 +86,7 @@ public class ProyectoService {
         // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
         Optional<Proyecto> optionalProyecto = proyectoRepository.findById(id);
         if (!optionalProyecto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo encontrar el proyecto.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo encontrar el proyecto.");
         }
 
         try {
@@ -104,7 +104,7 @@ public class ProyectoService {
         // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
         Optional<Proyecto> optionalProyecto = proyectoRepository.findById(id);
         if (!optionalProyecto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo encontrar el proyecto.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo encontrar el proyecto.");
         }
 
         try {
@@ -123,7 +123,7 @@ public class ProyectoService {
         // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
         Optional<Proyecto> optionalProyecto = proyectoRepository.findById(id);
         if (!optionalProyecto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo encontrar el proyecto.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo encontrar el proyecto.");
         }
 
         try {
@@ -141,7 +141,7 @@ public class ProyectoService {
         // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
         Optional<Proyecto> optionalProyecto = proyectoRepository.findById(id);
         if (!optionalProyecto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo encontrar el proyecto.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo encontrar el proyecto.");
         }
 
         try {
@@ -159,7 +159,7 @@ public class ProyectoService {
         // VALIDAR QUE EL ID ESTE LIGADO A UN ANTEPROYECTO
         Optional<Proyecto> optionalProyecto = proyectoRepository.findById(id);
         if (!optionalProyecto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo encontrar el proyecto.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo encontrar el proyecto.");
         }
 
         try {
